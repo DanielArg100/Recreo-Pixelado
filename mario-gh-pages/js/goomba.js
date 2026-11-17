@@ -11,8 +11,10 @@
       sprite: sprite,
       hitbox: [0,0,16,16]
     });
-    this.vel[0] = -0.5;
-    this.idx = level.enemies.length;
+		this.vel[0] = -0.5;
+		this.specialTimer = 1.5 + Math.random() * 2.5;
+		this.hopping = false;
+		this.idx = level.enemies.length;
   };
 
   Goomba.prototype.render = function(ctx, vX, vY) {
@@ -32,7 +34,13 @@
         delete level.enemies[this.idx];
       }
     }
-    this.acc[1] = 0.2;
+		this.specialTimer -= dt;
+		if (!this.dying && this.specialTimer <= 0 && Math.abs(this.vel[1]) < 0.05 && this.pos[1] % 16 < 0.1) {
+			this.vel[1] = -3.2;
+			this.hopping = true;
+			this.specialTimer = 2 + Math.random() * 3;
+		}
+		this.acc[1] = 0.2;
     this.vel[1] += this.acc[1];
     this.pos[0] += this.vel[0];
     this.pos[1] += this.vel[1];

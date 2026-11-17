@@ -16,8 +16,9 @@
       sprite: sprite,
       hitbox: [2,8,12,24]
     });
-    this.vel[0] = -0.5;
-    this.idx = level.enemies.length;
+		this.vel[0] = -0.5;
+		this.chargeTimer = 2 + Math.random() * 3;
+		this.idx = level.enemies.length;
   };
 
   Koopa.prototype.render = function(ctx, vX, vY) {
@@ -30,7 +31,12 @@
       if (this.shell) sounds.bump.play();
       this.turn = false;
     }
-    if (this.vel[0] != 0) {
+		this.chargeTimer -= dt;
+		if (!this.shell && this.chargeTimer <= 0 && Math.abs(this.pos[0] - player.pos[0]) < 88) {
+			this.vel[0] = player.pos[0] < this.pos[0] ? -1.8 : 1.8;
+			this.chargeTimer = 3 + Math.random() * 2;
+		}
+		if (this.vel[0] != 0) {
       this.left = (this.vel[0] < 0);
     }
 

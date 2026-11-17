@@ -21,13 +21,7 @@
   }
 
   Mushroom.prototype.spawn = function() {
-    if (player.power > 0) {
-      //replace this with a fire flower
-      var ff = new Mario.Fireflower(this.pos)
-      ff.spawn();
-      return;
-    }
-    sounds.itemAppear.play();
+		sounds.itemAppear.play();
     this.idx = level.items.length;
     level.items.push(this);
     this.spawning = 12;
@@ -106,7 +100,8 @@
     //if the hitboxes actually overlap
     if (!(hpos1[0] > hpos2[0]+player.hitbox[2] || (hpos1[0]+this.hitbox[2] < hpos2[0]))) {
       if (!(hpos1[1] > hpos2[1]+player.hitbox[3] || (hpos1[1]+this.hitbox[3] < hpos2[1]))) {
-        player.powerUp(this.idx);
+			player.heal(1);
+			delete level.items[this.idx];
       }
     }
   }

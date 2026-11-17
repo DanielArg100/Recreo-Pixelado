@@ -1,44 +1,83 @@
-﻿<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="es">
   <head>
     <meta charset="utf-8">
-
-    <!-- The actual resolution of the NES is 256x240.
-         Ideally, we draw in this size and scale appropriately.-->
-    <title>Super Mario Bros</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-
+    <meta name="description" content="Recreo Pixelado: controlás a Bruno, un payaso triste, en un nivel de plataformas ambientado en una escuela. Inspirado en Super Mario Bros. original.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Recreo Pixelado | Videojuego</title>
+    <link rel="shortcut icon" href="../SitioWeb/src/bruno-logo.png">
     <link rel="stylesheet" href="css/game.css">
   </head>
   <body>
-    <script type="text/javascript" src="js/util.js"></script>
-    <script type="text/javascript" src="js/input.js"></script>
-    <script type="text/javascript" src="js/resources.js"></script>
-    <script type="text/javascript" src="js/sprite.js"></script>
-    <script type="text/javascript" src="js/entity.js"></script>
-    <script type="text/javascript" src="js/pipe.js"></script>
-    <script type="text/javascript" src="js/mushroom.js"></script>
-    <script type="text/javascript" src="js/fireflower.js"></script>
-    <script type="text/javascript" src="js/star.js"></script>
-    <script type="text/javascript" src="js/fireball.js"></script>
-    <script type="text/javascript" src="js/coin.js"></script>
-    <script type="text/javascript" src="js/bcoin.js"></script>
-    <script type="text/javascript" src="js/goomba.js"></script>
-    <script type="text/javascript" src="js/koopa.js"></script>
-    <script type="text/javascript" src="js/floor.js"></script>
-    <script type="text/javascript" src="js/block.js"></script>
-    <script type="text/javascript" src="js/rubble.js"></script>
-    <script type="text/javascript" src="js/prop.js"></script>
-    <script type="text/javascript" src="js/player.js"></script>
-    <script type="text/javascript" src="js/flag.js"></script>
-    <script type="text/javascript" src="js/levels/level.js"></script>
-    <script type="text/javascript" src="js/levels/11.js"></script>
-    <script type="text/javascript" src="js/levels/11tunnel.js"></script>
-    <script type="text/javascript" src="js/game.js"></script>
-    <div class="info">
-      <p class="controls">Move: Arrow Keys, Jump: X, Run: Z</p>
-      <div class="links">My Links <br><a href="http://garrettjohnson.net">Portfolio</a> <a href="http://linkedin.com/in/garretttjohnson">LinkedIn</a> <a href="https://github.com/reruns">github</a><div>
-    </div>
+	    <header class="school-header">
+	      <a class="brand" href="../index.html" aria-label="Volver al inicio"><span class="brand-mark">RP</span><span>RECREO PIXELADO</span></a>
+	      <nav class="shell-nav" aria-label="Navegación del proyecto">
+	        <a href="../index.html">INICIO</a>
+	        <a href="../SitioWeb/Pages/controles.html">CONTROLES</a>
+	        <a href="../SitioWeb/Pages/sobreProyecto.html">PROYECTO</a>
+	      </nav>
+	      <div class="class-badge">6°3 <span>/</span> LAB WEB</div>
+	    </header>
+
+    <main class="game-page">
+	      <section class="hero-copy" aria-labelledby="game-title">
+	        <div class="hero-stamp">PROYECTO 01 <span>●</span> JUGABLE</div>
+	        <p class="eyebrow">EXPOTÉCNICA · AVENTURA ESCOLAR</p>
+	        <h1 id="game-title">RECREO <span>PIXELADO</span></h1>
+	        <p class="intro">Controlás a Bruno, un payaso triste, en un nivel ambientado en una escuela. Inspirado en Super Mario Bros. original.</p>
+	      </section>
+
+      <section class="game-card" aria-label="Pantalla del videojuego">
+        <div class="decor decor-book decor-book-left" aria-hidden="true">📚</div>
+        <div class="decor decor-star" aria-hidden="true">⭐</div>
+        <div class="decor decor-pencil" aria-hidden="true">🎈</div>
+	        <div class="screen-label"><span><span class="lamp"></span> AULA 1-1</span><span class="screen-code">PLATAFORMAS / 01</span><span class="live-dot">● EN JUEGO</span></div>
+        <div id="game-screen" class="game-screen">
+          <div id="game-hud" class="game-hud" aria-live="polite">
+            <div class="health-panel"><span class="hud-title">VIDA</span><span id="health-hearts"></span><span id="health-bar" class="health-bar"><span id="health-fill" class="health-fill"></span></span></div>
+            <div class="hammer-panel"><span class="hammer-icon">🔨</span><span class="hud-title">MARTILLO</span><span id="hammer-cooldown" class="cooldown-ring"></span><span id="hammer-status">LISTO</span></div>
+          </div>
+        </div>
+	        <div class="hud-note"><span>WASD</span> MOVER <i></i> <span>W</span> SALTAR <i></i> <span>E / CLICK</span> MARTILLO</div>
+	        <div class="game-meta" aria-label="Estado del recorrido">
+	          <div><small>SECTOR</small><strong>EXTERIOR → INTERIOR</strong></div>
+	          <div><small>OBJETIVO</small><strong>LLEGAR A LA BANDERA</strong></div>
+	          <div><small>FORMATO</small><strong>NIVEL DE PLATAFORMAS</strong></div>
+	        </div>
+	      </section>
+
+	      <section class="school-notes" aria-label="Información del juego">
+	        <article class="note-mission"><span class="note-index">01</span><strong>MISIÓN</strong><p>Recorré los dos ambientes del colegio y alcanzá la bandera de salida.</p></article>
+	        <article class="note-items"><span class="note-index">02</span><strong>RECURSOS</strong><p>Los objetos del nivel son útiles, premios y elementos del recreo.</p></article>
+	        <article class="note-tip"><span class="note-index">03</span><strong>CONSEJO</strong><p>Medí tus golpes: el martillo tiene cooldown y los obstáculos esconden sorpresas.</p></article>
+	      </section>
+    </main>
+
+	    <footer class="school-footer"><div><span class="footer-label">RECREO PIXELADO</span><span>Proyecto escolar · Expotécnica 6°3</span></div><a href="../index.html">VOLVER AL SITIO PRINCIPAL <b>↗</b></a></footer>
+
+    <script src="js/util.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/resources.js"></script>
+    <script src="js/sprite.js"></script>
+    <script src="js/entity.js"></script>
+    <script src="js/pipe.js"></script>
+	<script src="js/mushroom.js"></script>
+	<script src="js/fireflower.js"></script>
+    <script src="js/star.js"></script>
+	<script src="js/fireball.js"></script>
+    <script src="js/coin.js"></script>
+    <script src="js/bcoin.js"></script>
+	<script src="js/goomba.js"></script>
+    <script src="js/koopa.js"></script>
+    <script src="js/floor.js"></script>
+    <script src="js/block.js"></script>
+    <script src="js/rubble.js"></script>
+    <script src="js/prop.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/flag.js"></script>
+    <script src="js/levels/level.js"></script>
+    <script src="js/levels/11.js"></script>
+    <script src="js/levels/11tunnel.js"></script>
+    <script src="js/game.js"></script>
   </body>
 </html>

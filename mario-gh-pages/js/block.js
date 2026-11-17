@@ -22,14 +22,18 @@
 
   Mario.Util.inherits(Block, Mario.Floor);
 
-  Block.prototype.break = function() {
-    sounds.breakBlock.play();
-    (new Mario.Rubble()).spawn(this.pos);
-    var x = this.pos[0] / 16, y = this.pos[1] / 16;
-    delete level.blocks[y][x];
-  }
+	Block.prototype.break = function() {
+		sounds.breakBlock.play();
+		(new Mario.Rubble()).spawn(this.pos);
+		var x = this.pos[0] / 16, y = this.pos[1] / 16;
+		delete level.blocks[y][x];
+	}
 
-  Block.prototype.bonk = function(power) {
+	Block.prototype.hammerBreak = function() {
+		if (this.breakable) this.break();
+	}
+
+	Block.prototype.bonk = function(power) {
     sounds.bump.play();
     if (power > 0 && this.breakable) {
       this.break();
