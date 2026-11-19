@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Recreo Pixelado | Videojuego</title>
     <link rel="shortcut icon" href="../SitioWeb/src/bruno-logo.png">
-    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/game.css?v=4">
   </head>
   <body>
 	    <header class="school-header">
@@ -34,22 +34,60 @@
 	        <div class="screen-label"><span><span class="lamp"></span> AULA 1-1</span><span class="screen-code">PLATAFORMAS / 01</span><span class="live-dot">● EN JUEGO</span></div>
         <div id="game-screen" class="game-screen">
           <div id="game-hud" class="game-hud" aria-live="polite">
-            <div class="health-panel"><span class="hud-title">VIDA</span><span id="health-hearts"></span><span id="health-bar" class="health-bar"><span id="health-fill" class="health-fill"></span></span></div>
-            <div class="hammer-panel"><span class="hammer-icon">🔨</span><span class="hud-title">MARTILLO</span><span id="hammer-cooldown" class="cooldown-ring"></span><span id="hammer-status">LISTO</span></div>
+            <div id="hud-student" class="hud-student mood-calm">
+              <span class="hud-tape" aria-hidden="true"></span>
+              <div class="student-photo">
+                <img id="hud-face" src="src/hud/head_calm.png?v=1" alt="Retrato de Bruno">
+              </div>
+              <div class="student-data">
+                <span class="student-kicker">FICHA DEL ALUMNO</span>
+                <strong class="student-name">BRUNO</strong>
+                <span id="hud-mood" class="student-mood">TRANQUILO</span>
+                <span class="student-attempts"><b id="attempts-count">3</b> <span id="attempts-word">INTENTOS</span></span>
+              </div>
+              <span class="student-mark" aria-hidden="true">6°3</span>
+            </div>
+            <div class="hud-stats">
+              <div class="health-panel hud-card">
+                <span class="hud-title">VIDA</span>
+                <span id="health-hearts"></span>
+                <span id="health-bar" class="health-bar"><span id="health-fill" class="health-fill"></span></span>
+              </div>
+              <div class="attempts-panel hud-card">
+                <span class="hud-title">PRÓXIMO +1</span>
+                <span class="kill-progress"><b id="kill-progress">0/15</b> KO</span>
+                <span id="attempts-pips" class="attempts-pips" aria-hidden="true"></span>
+              </div>
+              <div class="hammer-panel hud-card">
+                <span class="hammer-icon">🔨</span>
+                <span class="hud-title">MARTILLO</span>
+                <span id="hammer-cooldown" class="cooldown-ring"></span>
+                <span id="hammer-status">LISTO</span>
+              </div>
+            </div>
+          </div>
+          <div id="hud-toast" class="hud-toast" role="status" aria-live="polite"></div>
+          <div id="game-overlay" class="game-overlay" hidden>
+            <div class="overlay-card">
+              <span class="overlay-kicker">BOLETÍN · RECREO PIXELADO</span>
+              <strong class="overlay-title">SIN INTENTOS</strong>
+              <p>Se terminaron los recreos de Bruno. El patio vuelve a empezar...</p>
+              <span class="overlay-hint">3 INTENTOS NUEVOS EN UN MOMENTO</span>
+            </div>
           </div>
         </div>
 	        <div class="hud-note"><span>WASD</span> MOVER <i></i> <span>W</span> SALTAR <i></i> <span>E / CLICK</span> MARTILLO</div>
 	        <div class="game-meta" aria-label="Estado del recorrido">
-	          <div><small>SECTOR</small><strong>EXTERIOR → INTERIOR</strong></div>
-	          <div><small>OBJETIVO</small><strong>LLEGAR A LA BANDERA</strong></div>
-	          <div><small>FORMATO</small><strong>NIVEL DE PLATAFORMAS</strong></div>
+	          <div><small>SECTOR</small><strong>EXTERIOR → PASILLOS</strong></div>
+	          <div><small>OBJETIVO</small><strong>CHECKPOINT Y BANDERA</strong></div>
+	          <div><small>FORMATO</small><strong>2 ETAPAS · 3 INTENTOS</strong></div>
 	        </div>
 	      </section>
 
 	      <section class="school-notes" aria-label="Información del juego">
-	        <article class="note-mission"><span class="note-index">01</span><strong>MISIÓN</strong><p>Recorré los dos ambientes del colegio y alcanzá la bandera de salida.</p></article>
-	        <article class="note-items"><span class="note-index">02</span><strong>RECURSOS</strong><p>Los objetos del nivel son útiles, premios y elementos del recreo.</p></article>
-	        <article class="note-tip"><span class="note-index">03</span><strong>CONSEJO</strong><p>Medí tus golpes: el martillo tiene cooldown y los obstáculos esconden sorpresas.</p></article>
+	        <article class="note-mission"><span class="note-index">01</span><strong>MISIÓN</strong><p>Recorré las dos mitades del colegio: patio, pasillos, saltos y torretas goblin hasta la bandera.</p></article>
+	        <article class="note-items"><span class="note-index">02</span><strong>RECURSOS</strong><p>Cada 15 enemigos derrotados sumás un intento. El cartel de ESCUELA es tu checkpoint.</p></article>
+	        <article class="note-tip"><span class="note-index">03</span><strong>CONSEJO</strong><p>Los goblins ya no caminan: están en lo alto. Subí por las escaleras y usá el martillo.</p></article>
 	      </section>
     </main>
 
@@ -58,26 +96,27 @@
     <script src="js/util.js"></script>
     <script src="js/input.js"></script>
     <script src="js/resources.js"></script>
-    <script src="js/sprite.js"></script>
+    <script src="js/sprite.js?v=5"></script>
     <script src="js/entity.js"></script>
     <script src="js/pipe.js"></script>
-	<script src="js/mushroom.js"></script>
-	<script src="js/fireflower.js"></script>
-    <script src="js/star.js"></script>
+	<script src="js/mushroom.js?v=2"></script>
+	<script src="js/fireflower.js?v=2"></script>
+    <script src="js/star.js?v=2"></script>
 	<script src="js/fireball.js"></script>
     <script src="js/coin.js"></script>
     <script src="js/bcoin.js"></script>
 	<script src="js/goomba.js"></script>
     <script src="js/koopa.js"></script>
+    <script src="js/goblin.js?v=8"></script>
     <script src="js/floor.js"></script>
     <script src="js/block.js"></script>
     <script src="js/rubble.js"></script>
     <script src="js/prop.js"></script>
-    <script src="js/player.js"></script>
-    <script src="js/flag.js"></script>
-    <script src="js/levels/level.js"></script>
-    <script src="js/levels/11.js"></script>
-    <script src="js/levels/11tunnel.js"></script>
-    <script src="js/game.js"></script>
+    <script src="js/player.js?v=4"></script>
+    <script src="js/flag.js?v=2"></script>
+    <script src="js/levels/level.js?v=5"></script>
+    <script src="js/levels/11.js?v=6"></script>
+    <script src="js/levels/11tunnel.js?v=5"></script>
+    <script src="js/game.js?v=8"></script>
   </body>
 </html>

@@ -31,15 +31,27 @@
 
   Sprite.prototype.play = function(animation) {
     if (!this.animations || !this.animations[animation]) return;
-    if (this.animationName === animation) return;
     var data = this.animations[animation];
+    if (this.animationName === animation) {
+      // El tamaño puede cambiar sin cambiar de animación (por ejemplo, al
+      // salir por la bandera). Recalculamos la escala para no deformar el frame.
+      this.frameScale = data.scaleH && this.size[1] ? this.size[1] / data.scaleH : null;
+      return;
+    }
     this.animationName = animation;
-    this.frames = data.frames;
     this.speed = data.fps;
     this.once = !data.loop;
     this._index = 0;
     this.done = false;
-    this.frameRects = data.rects;
+    if (data.images) {
+      this.frameImages = data.images;
+      this.frames = data.images.map(function(_, i) { return i; });
+      this.frameRects = null;
+    } else {
+      this.frameImages = null;
+      this.frames = data.frames;
+      this.frameRects = data.rects;
+    }
     // Escala física de la animación: el frame más alto mide this.size[1],
     // y los demás frames se dibujan proporcionales a esa escala.
     this.frameScale = data.scaleH && this.size[1] ? this.size[1] / data.scaleH : null;
@@ -65,6 +77,11 @@
     var y = this.pos[1];
     var activeImage = this.img;
     var activeRects = this.frameRects;
+    var useFrameImages = !!(this.frameImages && this.frameImages[frame]);
+    if (useFrameImages) {
+      activeImage = this.frameImages[frame];
+      activeRects = null;
+    }
     if (this.alternateImg && posx >= this.phaseX) {
       activeImage = this.alternateImg;
       activeRects = this.alternateFrameRects || this.frameRects;
@@ -76,17 +93,21 @@
       y = activeRects[frame][1];
       sourceWidth = activeRects[frame][2];
       sourceHeight = activeRects[frame][3];
+    } else if (useFrameImages) {
+      var fi = resources.get(activeImage);
+      if (fi) { sourceWidth = fi.width; sourceHeight = fi.height; }
+      x = 0;
+      y = 0;
     } else {
       x += frame*this.size[0];
     }
-    var isPlayer = this.isPlayer || /player/i.test(this.img);
     var drawX = Math.round(posx - vX) + ((this.renderOffset && this.renderOffset[0]) || 0);
     var drawY = Math.round(posy - vY) + ((this.renderOffset && this.renderOffset[1]) || 0);
     var drawW = this.size[0];
     var drawH = this.size[1];
-    // El jugador usa hojas de alta resolución: se escala cada frame a su
-    // tamaño real (proporción preservada), anclado abajo y centrado.
-    if (isPlayer && this.frameScale && activeRects && activeRects[frame]) {
+    // Los sprites con frames de alta resolución se escalan a su tamaño real
+    // (proporción preservada), anclados abajo y centrados.
+    if (this.frameScale && (useFrameImages || (activeRects && activeRects[frame]))) {
       drawH = Math.max(1, Math.round(sourceHeight * this.frameScale));
       drawW = Math.max(1, Math.round(sourceWidth * this.frameScale));
       drawX += Math.round((this.size[0] - drawW) / 2);

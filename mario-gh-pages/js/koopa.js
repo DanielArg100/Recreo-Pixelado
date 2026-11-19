@@ -213,5 +213,6 @@
     this.sprite.speed = 0;
     this.vel[0] = 0;
     this.vel[1] = -2.5;
+    if (Mario.registerKill) Mario.registerKill(this);
   };
 })();

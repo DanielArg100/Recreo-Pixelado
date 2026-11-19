@@ -102,6 +102,7 @@
       if (!(hpos1[1] > hpos2[1]+player.hitbox[3] || (hpos1[1]+this.hitbox[3] < hpos2[1]))) {
 			player.heal(1);
 			delete level.items[this.idx];
+			if (Mario.onPickup) Mario.onPickup('mushroom');
       }
     }
   }

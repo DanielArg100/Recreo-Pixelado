@@ -1,6 +1,6 @@
 var oneonetunnel = Mario.oneonetunnel = function() {
-  var schoolTiles = 'src/tiles/tilesetExterior.png';
-  var interiorTiles = 'src/tiles/tilesetEscolar.png';
+  var schoolTiles = 'src/hojaDeSprites/tilesetExterior.png';
+  var interiorTiles = 'src/hojaDeSprites/tilesetEscolar.png';
   var schoolSprite = function(x, y, w, h, destW, destH) {
     var sprite = new Mario.Sprite(schoolTiles, [0,0], [destW || 16, destH || 16], 0, [0]);
     sprite.frameRects = [[x, y, w, h]];
@@ -40,6 +40,9 @@ var oneonetunnel = Mario.oneonetunnel = function() {
   player.pos[0] = level.playerPos[0];
   player.pos[1] = level.playerPos[1];
   vX = 0;
+
+  Mario.goblinShots.length = 0;
+  Mario.fireAreas.length = 0;
   level.putFloor(0,16);
   level.putWall(0,13,11);
   walls = [4,5,6,7,8,9,10];
@@ -55,7 +58,7 @@ var oneonetunnel = Mario.oneonetunnel = function() {
 
   level.putRealPipe(13,11,3,'RIGHT', function() {
     Mario.oneone.call();
-    player.pos = [2616, 177];
+    player.pos = [2024, 177];
     player.pipe('UP', function() {});
   });
   level.putPipe(15,13,13);

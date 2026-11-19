@@ -36,12 +36,14 @@
         music.clear.play();
       }, 2000);
       this.hit = true;
+      if (Mario.onLevelClear) Mario.onLevelClear();
       player.flag();
       this.vel = [0, 2];
     }
   }
 
   Flag.prototype.render = function() {
-    level.flagpoleSprites[2].render(ctx, this.pos[0]-8, this.pos[1], vX, vY);
+    // La bandera visible es un prop del nivel (exterior_14.png); esta entidad
+    // solo existe para detectar la llegada del jugador.
   }
 })();

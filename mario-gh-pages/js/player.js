@@ -2,24 +2,28 @@
 	if (typeof Mario === 'undefined')
 		window.Mario = {};
 
-		var clownSheet = 'src/Player/HojaSpritesDF.png?v=2';
-	var rect = function(x, y, w, h) { return [x, y, w, h]; };
-	// HojaSpritesDF.png (1536x1024): rects medidos sobre la hoja real.
-	// scaleH = alto máximo de la animación, para escalar todos los frames
-	// al mismo tamaño físico (anclados abajo al centro).
+	var clownSheet = 'src/Player/frames/idle_0.png';
+	// Frames individuales: cada animación lista las imágenes de sus frames.
+	// scaleH = alto máximo (en px de la hoja original) para escalar todos los
+	// frames al mismo tamaño físico (anclados abajo al centro).
+	var F = function(name, i) { return 'src/Player/frames/' + name + '_' + i + '.png'; };
 	var clownAnimations = {
-		idle: { fps: 6, loop: true, scaleH: 209, frames: [0,1,2,3], rects: [rect(76,49,85,208),rect(180,47,78,207),rect(278,46,78,209),rect(374,47,80,207)] },
-		walk: { fps: 10, loop: true, scaleH: 203, frames: [0,1,2,3,4,5], rects: [rect(523,54,75,201),rect(613,51,74,203),rect(697,52,76,201),rect(773,55,90,198),rect(863,55,82,198),rect(953,58,79,197)] },
-		run: { fps: 14, loop: true, scaleH: 202, frames: [0,1,2,3], rects: [rect(1085,63,99,191),rect(1178,62,100,199),rect(1278,62,114,186),rect(1392,72,106,192)] },
-		jump: { fps: 8, loop: false, scaleH: 198, frames: [0,1,2,3], rects: [rect(50,323,104,180),rect(159,305,111,198),rect(276,317,91,169),rect(369,334,97,193)] },
-		fall: { fps: 8, loop: true, scaleH: 185, frames: [0,1,2], rects: [rect(521,318,104,185),rect(627,341,93,185),rect(722,361,106,166)] },
-		hurt: { fps: 8, loop: false, scaleH: 206, frames: [0,1], rects: [rect(896,326,105,201),rect(1011,324,92,206)] },
-		die: { fps: 6, loop: false, scaleH: 213, frames: [0,1,2], rects: [rect(1184,323,77,213),rect(1275,398,103,138),rect(1373,465,145,77)] },
-		attack: { fps: 12, loop: false, scaleH: 190, frames: [0,1,2,3], rects: [rect(33,611,138,172),rect(174,595,101,190),rect(284,594,150,190),rect(452,616,157,171)] },
-		powerUp: { fps: 8, loop: false, scaleH: 190, frames: [0,1,2,3], rects: [rect(655,607,78,190),rect(737,613,119,185),rect(874,625,84,171),rect(978,615,96,182)] },
-		hurryUp: { fps: 12, loop: true, scaleH: 178, frames: [0,1,2], rects: [rect(1148,615,120,178),rect(1263,623,111,170),rect(1363,624,117,169)] },
-		special: { fps: 7, loop: false, scaleH: 194, frames: [0,1,2], rects: [rect(70,840,87,168),rect(204,818,129,194),rect(370,824,81,185)] }
+		idle: { fps: 6, loop: true, scaleH: 209, images: [F('idle',0),F('idle',1),F('idle',2),F('idle',3)] },
+		walk: { fps: 10, loop: true, scaleH: 203, images: [F('walk',0),F('walk',1),F('walk',2),F('walk',3),F('walk',4),F('walk',5)] },
+		run: { fps: 14, loop: true, scaleH: 202, images: [F('run',0),F('run',1),F('run',2),F('run',3)] },
+		jump: { fps: 8, loop: false, scaleH: 198, images: [F('jump',0),F('jump',1),F('jump',2),F('jump',3)] },
+		fall: { fps: 8, loop: true, scaleH: 185, images: [F('fall',0),F('fall',1),F('fall',2)] },
+		hurt: { fps: 8, loop: false, scaleH: 206, images: [F('hurt',0),F('hurt',1)] },
+		die: { fps: 6, loop: false, scaleH: 213, images: [F('die',0),F('die',1),F('die',2)] },
+		attack: { fps: 12, loop: false, scaleH: 190, images: [F('attack',0),F('attack',1),F('attack',2),F('attack',3)] },
+		powerUp: { fps: 8, loop: false, scaleH: 190, images: [F('powerUp',0),F('powerUp',1),F('powerUp',2),F('powerUp',3)] },
+		hurryUp: { fps: 12, loop: true, scaleH: 178, images: [F('hurryUp',0),F('hurryUp',1),F('hurryUp',2)] },
+		special: { fps: 7, loop: false, scaleH: 194, images: [F('special',0),F('special',1),F('special',2)] }
 	};
+	// Cargar todos los frames individuales.
+	var __framePaths = [];
+	for (var __a in clownAnimations) { clownAnimations[__a].images.forEach(function(p){ __framePaths.push(p); }); }
+	if (typeof resources !== 'undefined' && resources.load) resources.load(__framePaths);
 
 	var Player = Mario.Player = function(pos) {
 		//I know, I know, there are a lot of variables tracking Mario's state.
@@ -39,6 +43,7 @@
 		this.crouching = false;
 		this.fireballs = 0;
 		this.noInput = false;
+		this.deathHandled = false;
 		this.targetPos = [];
 		this.maxSpeed = 1.5;
 		this.moveAcc = 0.07;
@@ -213,7 +218,9 @@
 		}
 
 		if (this.invincibility) {
-			this.invincibility -= Math.round(dt * 60);
+			// Se descuenta en tiempo real: Math.round(dt * 60) podía dar 0 en
+			// pantallas de alta frecuencia y la invulnerabilidad no terminaba.
+			this.invincibility = Math.max(0, this.invincibility - dt * 60);
 		}
 
 		if (this.waiting) {
@@ -244,10 +251,15 @@
 						this.vel[1] = 1;
 					}
 					this.dying -= 1 * dt;
-			if (this.dying <= 0) {
-				player = new Mario.Player(level.playerPos);
-				level.loader.call();
-				input.reset();
+			if (this.dying <= 0 && !this.deathHandled) {
+				this.deathHandled = true;
+				if (Mario.onPlayerDeath) {
+					Mario.onPlayerDeath();
+				} else {
+					player = new Mario.Player(level.playerPos);
+					level.loader.call();
+					input.reset();
+				}
 			}
 		}
 		else {
@@ -279,8 +291,14 @@
 				this.vel = [0,0];
 				window.setTimeout(function() {
 						player.sprite.size = [28,40];
+					// El sprite estuvo dibujándose a tamaño cero durante la
+					// salida: forzamos de nuevo la animación para recalcular
+					// la escala de los frames y evitar que se vea estirado.
+					player.sprite.animationName = '';
+					player.sprite.play('idle');
 					player.exiting = false;
 					player.noInput = false;
+					if (Mario.onLevelRestart) Mario.onLevelRestart();
 					level.loader();
 					if (player.power !== 0) player.pos[1] -= 16;
 					music.overworld.currentTime = 0;
