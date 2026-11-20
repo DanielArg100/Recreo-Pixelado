@@ -5,21 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Sobre Recreo Pixelado - Expotécnica 6°3, tecnologías y base Full Screen Mario."
+      content="Sobre Recreo Pixelado: Expotécnica 6°3 de la E.E.S.T N°1 Cecilia Berdichevsky, tecnologías y mecánicas nuevas."
     />
     <link rel="shortcut icon" href="../src/bruno-logo.png" />
-    <link rel="stylesheet" href="../style/estilos.css" />
+    <link rel="stylesheet" href="../style/estilos.css?v=4" />
     <title>Recreo Pixelado | Sobre el Proyecto</title>
   </head>
   <body>
     <header class="encabezado">
-      <img src="../src/bruno-logo.png" alt="Bruno - Recreo Pixelado" />
-      <nav class="menu">
+      <a class="marca" href="../../index.html" aria-label="Recreo Pixelado, inicio">
+        <img src="../src/bruno-logo.png" alt="Bruno - Recreo Pixelado" />
+        <span>RECREO<br />PIXELADO</span>
+      </a>
+      <nav class="menu" aria-label="Navegación principal">
         <a href="../../index.html">INICIO</a>
         <a href="historia.html">HISTORIA</a>
         <a href="controles.html">CONTROLES</a>
-        <a href="sobreProyecto.html">SOBRE EL PROYECTO</a>
-        <a href="../../mario-gh-pages/videojuego.html">¡JUGAR!</a>
+        <a href="sobreProyecto.html">PROYECTO</a>
+        <a class="menu-jugar" href="../../mario-gh-pages/videojuego.html">¡JUGAR!</a>
       </nav>
     </header>
 
@@ -28,37 +31,44 @@
         <h1>SOBRE EL PROYECTO</h1>
         <p>
           Proyecto escolar desarrollado para la <strong>Expotécnica</strong> de
-          <strong>6°3</strong>, en la materia
-          <strong>Laboratorio de Diseño Web</strong> bajo la supervisión del
-          Profesor Pablo Gareis.
+          <strong>6°3</strong> de la <strong>E.E.S.T N°1 “Cecilia Berdichevsky”</strong>,
+          en la materia <strong>Laboratorio de Diseño Web</strong> bajo la
+          supervisión del Profesor Pablo Gareis. Recreo Pixelado es un juego de
+          plataformas protagonizado por Bruno, un payaso triste, que transcurre
+          entre las aulas, pasillos y patio de esa escuela.
         </p>
 
         <h1>OBJETIVO</h1>
         <p>
           Crear un sitio web funcional dedicado a Recreo Pixelado, combinando
           contenido informativo sobre el juego con una versión web jugable del
-          mismo. El protagonista es Bruno, un payaso triste, en un nivel
-          ambientado en una escuela. Uno de los principales objetivos fue
-          desarrollar una experiencia propia mediante la creación de un nivel
-          personalizado.
+          mismo. El objetivo principal fue desarrollar una experiencia propia
+          mediante un <strong>nivel personalizado</strong> y, después, seguir
+          sumando mecánicas originales: el mate, sus efectos, el martillo
+          mejorado y los enemigos con ocurrencias graciosas.
         </p>
 
         <h1>CARACTERÍSTICAS</h1>
         <p>
-          • Sitio web dedicado a Recreo Pixelado.<br /><br />
-          • Páginas con información relacionada con el videojuego.<br /><br />
-          • Juego completamente jugable desde el navegador.<br /><br />
-          • Nivel personalizado diseñado especialmente para el proyecto.<br /><br />
-          • Adaptación y modificación de elementos del juego.<br /><br />
-          • Funcionamiento directamente desde una página web, sin necesidad
-          de instalar un programa adicional.
+          • Sitio web completo con inicio, historia, controles y proyecto.<br /><br />
+          • Juego completamente jugable desde el navegador, en dos etapas.<br /><br />
+          • <strong>Mate:</strong> material de enemigos y bloques rotos (25%),
+          hasta 2 guardados y tecla <kbd>M</kbd> para cebar.<br /><br />
+          • <strong>13 efectos aleatorios</strong> con HUD de tiempo restante
+          y estrellas en pantalla para el mareo y las alucinaciones.<br /><br />
+          • <strong>Martillo</strong> de alcance base 24 px, golpe simétrico y
+          refuerzo temporal de +12 px.<br /><br />
+          • <strong>Enemigos goofy:</strong> goombas y koopas con ocurrencias
+          aleatorias y globos de texto.<br /><br />
+          • Checkpoint, bandera, intentos renovables y HUD con retrato de Bruno.<br /><br />
+          • Funcionamiento directo en la web, sin instalar nada.
         </p>
 
         <h1>TECNOLOGÍAS UTILIZADAS</h1>
         <p>
           <strong>HTML5</strong> — Estructura de las páginas.<br /><br />
-          <strong>CSS3</strong> — Diseño y estilos.<br /><br />
-          <strong>JavaScript</strong> — Lógica e interacción.<br /><br />
+          <strong>CSS3</strong> — Diseño y estilos (incluye el overlay de efectos).<br /><br />
+          <strong>JavaScript</strong> — Lógica del juego, drop del mate y efectos.<br /><br />
           <strong>Canvas</strong> — Renderizado de elementos del videojuego.<br /><br />
           Además, se utilizó como base el proyecto
           <strong>Full Screen Mario</strong> para la implementación del
@@ -84,13 +94,14 @@
           El nivel fue creado utilizando la estructura proporcionada por Full
           Screen Mario, modificando elementos como la distribución del escenario,
           plataformas, enemigos, obstáculos, tuberías, bloques, objetos y
-          dificultad para crear un desafío diferente a los encontrados en los
-          niveles originales.
+          dificultad. Se agregaron dos etapas, un checkpoint en el cartel de
+          ESCUELA, torretas goblin y el sistema de mates para crear un desafío
+          diferente a los niveles originales.
         </p>
 
         <h1>CONTEXTO ACADÉMICO</h1>
         <p>
-          <strong>Institución:</strong> Cecilia Berdichevsky<br /><br />
+          <strong>Institución:</strong> E.E.S.T N°1 “Cecilia Berdichevsky”<br /><br />
           <strong>Curso:</strong> 6°3<br /><br />
           <strong>Materia:</strong> Laboratorio de Diseño Web<br /><br />
           <strong>Profesor:</strong> Pablo Gareis<br /><br />
@@ -114,9 +125,9 @@
       <div class="info">
         <img src="../src/bruno-logo.png" alt="Bruno Logo" />
         <p>
-          Proyecto escolar desarrollado para la Expotécnica de 6°3 - Laboratorio
-          de Diseño Web. Videojuego de plataformas en una escuela, basado en el
-          Super Mario Bros. original.
+          Proyecto escolar de la <strong>E.E.S.T N°1 “Cecilia Berdichevsky”</strong>,
+          curso 6°3 · Laboratorio de Diseño Web. Recreo Pixelado: un plataformas
+          escolar inspirado en el Super Mario Bros. original.
         </p>
       </div>
       <div class="redes">
@@ -139,14 +150,14 @@
           allowfullscreen=""
           loading="lazy"
           referrerpolicy="strict-origin-when-cross-origin"
-          title="Ubicación"
+          title="Ubicación de la escuela"
         ></iframe>
       </div>
       <div class="enlaces">
         <a href="../../index.html">INICIO</a>
         <a href="historia.html">HISTORIA</a>
         <a href="controles.html">CONTROLES</a>
-        <a href="sobreProyecto.html">SOBRE EL PROYECTO</a>
+        <a href="sobreProyecto.html">PROYECTO</a>
         <a href="../../mario-gh-pages/videojuego.html">¡JUGAR!</a>
       </div>
     </footer>

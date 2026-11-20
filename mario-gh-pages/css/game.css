@@ -509,6 +509,286 @@ a { color: inherit; }
 }
 .hammer-panel.cooling { opacity: 0.7; }
 
+/* ---------- Mate: inventario, cebado y aviso de listo ---------- */
+.mate-panel { gap: 6px; }
+.mate-panel .mate-icon { font-size: 11px; line-height: 1; }
+.mate-panel.brewing { border-color: var(--amarillo-lapiz); }
+.mate-slots { display: inline-flex; align-items: center; gap: 3px; }
+.mate-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--papel);
+  color: var(--pizarra);
+  font-size: 10px;
+  line-height: 1;
+  overflow: hidden;
+}
+.mate-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.mate-slot.filled { border-color: var(--amarillo-lapiz); background: rgba(255, 211, 77, 0.16); }
+.mate-hint { color: var(--tiza); font-size: 7px; white-space: nowrap; }
+.mate-panel.brewing .mate-hint { color: var(--amarillo-lapiz); }
+.mate-brew {
+  display: none;
+  width: 54px;
+  height: 9px;
+  background: #000;
+  border: 1px solid var(--papel);
+  box-shadow: 0 0 0 1px var(--tinta);
+}
+.mate-panel.brewing .mate-brew { display: inline-block; }
+.mate-brew-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(to bottom, #d9a066 0 50%, #8a5a33 50% 100%);
+}
+
+/* Cuenta regresiva de los efectos temporales del mate. */
+.mate-effect {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  min-width: 178px;
+  border-color: var(--amarillo-lapiz);
+}
+.mate-effect[hidden] { display: none; }
+.mate-effect-row { display: flex; align-items: center; gap: 5px; width: 100%; }
+.mate-effect-label {
+  flex: 1;
+  color: var(--amarillo-lapiz);
+  font-size: 7px;
+  white-space: nowrap;
+}
+.mate-effect-row[data-kind="hurt"] .mate-effect-label { color: var(--rojo-manzana); }
+.mate-effect-row[data-kind="win"] .mate-effect-label { color: var(--verde-hoja); }
+.mate-effect-bar {
+  width: 42px;
+  height: 7px;
+  background: #000;
+  border: 1px solid var(--papel);
+  box-shadow: 0 0 0 1px var(--tinta);
+}
+.mate-effect-fill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--amarillo-lapiz);
+}
+.mate-effect-row[data-kind="hurt"] .mate-effect-fill { background: var(--rojo-manzana); }
+.mate-effect-row[data-kind="win"] .mate-effect-fill { background: var(--verde-hoja); }
+.mate-effect-time {
+  min-width: 26px;
+  color: var(--papel);
+  font-size: 7px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.mate-ready {
+  position: absolute;
+  top: 43%;
+  left: 50%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 238px;
+  padding: 10px 16px 10px 10px;
+  color: var(--tinta);
+  background: var(--papel);
+  border: 4px solid var(--tinta);
+  box-shadow: 0 0 0 4px var(--amarillo-lapiz), 8px 8px 0 rgba(0, 0, 0, 0.45);
+  font: 10px/1.5 var(--fuente-pixel);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.45) rotate(-14deg);
+  pointer-events: none;
+}
+.mate-ready[data-kind="hurt"] { box-shadow: 0 0 0 4px var(--rojo-manzana), 8px 8px 0 rgba(0, 0, 0, 0.45); }
+.mate-ready[data-kind="win"] { box-shadow: 0 0 0 4px var(--verde-hoja), 8px 8px 0 rgba(0, 0, 0, 0.45); }
+.mate-ready.show { animation: mate-ready-pop 2.8s cubic-bezier(0.2, 1.35, 0.4, 1) both; }
+
+.mate-ready-burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 230px;
+  height: 230px;
+  margin: -115px 0 0 -115px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg,
+    var(--amarillo-lapiz) 0deg 9deg, transparent 9deg 18deg);
+  -webkit-mask: radial-gradient(circle, transparent 0 58px, #000 59px);
+  mask: radial-gradient(circle, transparent 0 58px, #000 59px);
+  opacity: 0;
+  pointer-events: none;
+}
+.mate-ready.show .mate-ready-burst { animation: mate-burst 1.15s ease-out both; }
+
+.mate-ready-steam {
+  position: absolute;
+  top: -18px;
+  width: 9px;
+  height: 19px;
+  border-left: 3px solid rgba(255, 255, 255, 0.92);
+  border-radius: 50%;
+  opacity: 0;
+}
+.mate-ready-steam-1 { left: 27px; }
+.mate-ready-steam-2 { left: 39px; animation-delay: 0.14s !important; }
+.mate-ready-steam-3 { left: 51px; animation-delay: 0.28s !important; }
+.mate-ready.show .mate-ready-steam { animation: mate-steam 1.25s ease-out 0.18s both; }
+
+.mate-ready-cup {
+  position: relative;
+  z-index: 1;
+  font-size: 34px;
+  line-height: 1;
+  transform-origin: center bottom;
+}
+.mate-ready.show .mate-ready-cup {
+  animation: mate-cup-pop 1.35s cubic-bezier(0.25, 1.5, 0.45, 1) both;
+}
+.mate-ready-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+.mate-ready-kicker {
+  color: var(--amarillo-lapiz);
+  font-size: 8px;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 0 var(--tinta);
+}
+.mate-ready-effect { font-size: 11px; }
+
+.game-screen.mate-celebrate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 43%, rgba(255, 211, 77, 0.6) 0%, transparent 58%);
+  animation: mate-flash 1.2s ease-out both;
+}
+
+@keyframes mate-ready-pop {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4) rotate(-14deg); }
+  12% { opacity: 1; transform: translate(-50%, -50%) scale(1.18) rotate(4deg); }
+  22% { transform: translate(-50%, -50%) scale(0.94) rotate(-2deg); }
+  32%, 78% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  88% { opacity: 1; transform: translate(-50%, -50%) scale(1.04) rotate(1deg); }
+  100% { opacity: 0; transform: translate(-50%, -72%) scale(0.9) rotate(-1deg); }
+}
+@keyframes mate-burst {
+  0% { opacity: 0; transform: scale(0.2) rotate(0deg); }
+  25% { opacity: 0.9; }
+  100% { opacity: 0; transform: scale(1.35) rotate(70deg); }
+}
+@keyframes mate-cup-pop {
+  0% { transform: translateY(9px) rotate(-35deg) scale(0.5); }
+  18% { transform: translateY(-5px) rotate(12deg) scale(1.25); }
+  32% { transform: translateY(0) rotate(-6deg) scale(1); }
+  45%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+}
+@keyframes mate-steam {
+  0% { opacity: 0; transform: translateY(6px) scale(0.6); }
+  25% { opacity: 0.85; }
+  100% { opacity: 0; transform: translateY(-25px) scale(1.25); }
+}
+@keyframes mate-flash {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Efectos visuales de los mates raros. */
+.game-screen.mate-dizzy canvas { animation: mate-dizzy 1.6s ease-in-out infinite; }
+.game-screen.mate-trippy canvas { animation: mate-trippy 2.4s linear infinite; }
+.game-screen.mate-dizzy.mate-trippy canvas { animation: mate-dizzy 1.6s ease-in-out infinite, mate-trippy 2.4s linear infinite; }
+.game-screen.mate-trippy { background-image: radial-gradient(circle at 50% 38%, #3b1c4a 0%, #12091c 72%); }
+@keyframes mate-dizzy {
+  0%, 100% { transform: rotate(-1deg) scale(1); }
+  25% { transform: rotate(1.2deg) scale(1.01); }
+  50% { transform: rotate(-1.2deg) scale(1); }
+  75% { transform: rotate(1deg) scale(1.01); }
+}
+@keyframes mate-trippy {
+  0% { filter: hue-rotate(0deg) saturate(1.35) contrast(1.05); }
+  50% { filter: hue-rotate(180deg) saturate(1.7) contrast(1.1); }
+  100% { filter: hue-rotate(360deg) saturate(1.35) contrast(1.05); }
+}
+
+/* Estrellas y símbolos que aparecen con el mareo o las alucinaciones. */
+.mate-fx {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.game-screen.mate-dizzy .mate-fx,
+.game-screen.mate-trippy .mate-fx { opacity: 1; }
+.mate-fx span {
+  position: absolute;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--amarillo-lapiz);
+  text-shadow: 2px 2px 0 var(--tinta), 0 0 6px rgba(255, 211, 77, 0.7);
+}
+.mate-fx .fx-1 { left: 9%; top: 22%; }
+.mate-fx .fx-2 { left: 24%; top: 68%; }
+.mate-fx .fx-3 { left: 44%; top: 14%; }
+.mate-fx .fx-4 { left: 61%; top: 76%; }
+.mate-fx .fx-5 { left: 78%; top: 30%; }
+.mate-fx .fx-6 { left: 90%; top: 62%; }
+.mate-fx .fx-7 { left: 16%; top: 45%; }
+.mate-fx .fx-8 { left: 52%; top: 52%; }
+.mate-fx .fx-9 { left: 70%; top: 12%; }
+.mate-fx .fx-10 { left: 34%; top: 84%; }
+
+.game-screen.mate-dizzy .fx-star { animation: fx-orbit 1.7s ease-in-out infinite; }
+.game-screen.mate-dizzy .fx-star:nth-child(2n) { animation-delay: -0.5s; }
+.game-screen.mate-dizzy .fx-star:nth-child(3n) { animation-delay: -1s; }
+.game-screen.mate-dizzy .fx-symbol { animation: fx-orbit 2.1s ease-in-out infinite reverse; }
+.game-screen.mate-dizzy .fx-symbol:nth-child(odd) { animation-delay: -0.8s; }
+
+.game-screen.mate-trippy .fx-star { color: #fff; animation: fx-drift 2.6s linear infinite; }
+.game-screen.mate-trippy .fx-star:nth-child(2n) { color: #ff8ce0; animation-delay: -0.7s; }
+.game-screen.mate-trippy .fx-star:nth-child(3n) { color: #8cffd8; animation-delay: -1.5s; }
+.game-screen.mate-trippy .fx-symbol { color: #ffe66b; animation: fx-pop 1.4s ease-in-out infinite; }
+.game-screen.mate-trippy .fx-symbol:nth-child(even) { color: #9ad6ff; animation-delay: -0.7s; }
+
+@keyframes fx-orbit {
+  0%, 100% { transform: translate(0, 0) rotate(0deg) scale(0.75); opacity: 0.35; }
+  25% { transform: translate(8px, -10px) rotate(90deg) scale(1.1); opacity: 1; }
+  50% { transform: translate(0, -16px) rotate(180deg) scale(0.8); opacity: 0.6; }
+  75% { transform: translate(-8px, -6px) rotate(270deg) scale(1.15); opacity: 1; }
+}
+@keyframes fx-drift {
+  0% { transform: translateY(16px) rotate(-40deg) scale(0.6); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-28px) rotate(50deg) scale(1.25); opacity: 0; }
+}
+@keyframes fx-pop {
+  0%, 100% { transform: scale(0.6) rotate(-15deg); opacity: 0.3; }
+  50% { transform: scale(1.35) rotate(15deg); opacity: 1; }
+}
+
 @keyframes head-bob {
   0%, 100% { transform: translateY(1px) rotate(-1deg); }
   50% { transform: translateY(-2px) rotate(1deg); }
@@ -635,7 +915,7 @@ a { color: inherit; }
 /* ---------- Fichas de estado (papel con borde de lápiz) ---------- */
 .game-meta {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 3px;
   margin-top: 20px;
   background: var(--pizarra-oscuro);
@@ -802,6 +1082,19 @@ a { color: inherit; }
   .hud-card { font-size: 5px; padding: 3px 5px; gap: 4px; border-width: 2px; box-shadow: 0 0 0 1px var(--tinta), 2px 2px 0 rgba(0, 0, 0, 0.3); }
   .hud-title { display: none; }
   .hud-card .hammer-icon { font-size: 9px; }
+  .mate-panel .mate-icon { font-size: 9px; }
+  .mate-slot { width: 12px; height: 12px; font-size: 7px; }
+  .mate-hint { font-size: 5px; }
+  .mate-brew { width: 34px; height: 7px; }
+  .mate-effect { min-width: 0; gap: 2px; }
+  .mate-effect-label { font-size: 5px; }
+  .mate-effect-bar { width: 30px; height: 5px; }
+  .mate-effect-time { font-size: 5px; min-width: 21px; }
+  .mate-ready { top: 46%; min-width: 0; max-width: 92%; gap: 7px; padding: 7px 10px 7px 7px; border-width: 3px; box-shadow: 0 0 0 3px var(--amarillo-lapiz), 5px 5px 0 rgba(0, 0, 0, 0.45); white-space: normal; }
+  .mate-ready-cup { font-size: 24px; }
+  .mate-ready-kicker { font-size: 6px; }
+  .mate-ready-effect { font-size: 7px; }
+  .mate-ready-burst { width: 170px; height: 170px; margin: -85px 0 0 -85px; -webkit-mask: radial-gradient(circle, transparent 0 42px, #000 43px); mask: radial-gradient(circle, transparent 0 42px, #000 43px); }
   .heart { font-size: 10px; }
   .health-bar { width: 40px; height: 10px; }
   .cooldown-ring { width: 11px; height: 11px; border-width: 1px; box-shadow: 0 0 0 1px var(--tinta); }
@@ -824,5 +1117,8 @@ a { color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
-  .live-dot { animation: none; }
+  .live-dot, .game-screen.mate-dizzy canvas, .game-screen.mate-trippy canvas,
+  .mate-ready, .mate-ready *, .game-screen.mate-celebrate::after,
+  .mate-fx, .mate-fx * { animation: none; }
+  .mate-ready.show { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
 }

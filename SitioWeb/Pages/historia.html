@@ -5,21 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Premisa de Recreo Pixelado: Bruno, un payaso triste, recorre la escuela durante el recreo."
+      content="Historia de Recreo Pixelado: Bruno, el payaso triste, recorre la E.E.S.T N°1 Cecilia Berdichevsky durante el recreo."
     />
     <link rel="shortcut icon" href="../src/bruno-logo.png" />
-    <link rel="stylesheet" href="../style/estilos.css" />
+    <link rel="stylesheet" href="../style/estilos.css?v=4" />
     <title>Recreo Pixelado | Historia</title>
   </head>
   <body>
     <header class="encabezado">
-      <img src="../src/bruno-logo.png" alt="Bruno - Recreo Pixelado" />
-      <nav class="menu">
+      <a class="marca" href="../../index.html" aria-label="Recreo Pixelado, inicio">
+        <img src="../src/bruno-logo.png" alt="Bruno - Recreo Pixelado" />
+        <span>RECREO<br />PIXELADO</span>
+      </a>
+      <nav class="menu" aria-label="Navegación principal">
         <a href="../../index.html">INICIO</a>
         <a href="historia.html">HISTORIA</a>
         <a href="controles.html">CONTROLES</a>
-        <a href="sobreProyecto.html">SOBRE EL PROYECTO</a>
-        <a href="../../mario-gh-pages/videojuego.html">¡JUGAR!</a>
+        <a href="sobreProyecto.html">PROYECTO</a>
+        <a class="menu-jugar" href="../../mario-gh-pages/videojuego.html">¡JUGAR!</a>
       </nav>
     </header>
 
@@ -28,29 +31,62 @@
         <h1>PREMISA</h1>
         <p>
           Controlás a <strong>Bruno</strong>, un payaso triste que recorre la
-          escuela durante el recreo. Su objetivo es atravesar el nivel y llegar a
-          la bandera de salida.
+          <strong>E.E.S.T N°1 “Cecilia Berdichevsky”</strong> durante el recreo.
+          Su objetivo es atravesar las dos etapas del nivel y llegar hasta la
+          bandera. Todo lo que ves en pantalla pasa dentro de esa escuela: el
+          patio, los pasillos y las aulas son el escenario del juego.
         </p>
 
         <h1>EL RECREO</h1>
         <p>
-          El juego transcurre en un único nivel ambientado en una escuela: aulas,
-          pasillos y patio. No hay una historia compleja: es una aventura de
-          plataformas corta y directa.
+          El recorrido arranca en el exterior, sigue por los pasillos y termina
+          en la bandera. En el medio hay saltos, bloques, tuberías, torretas
+          goblin y un cartel de ESCUELA que funciona como checkpoint. Hay una
+          segunda mitad del nivel, así que el recreo no se termina enseguida.
+        </p>
+        <p>
+          Bruno empieza con <strong>3 intentos</strong>. Cada 15 enemigos
+          derrotados gana uno nuevo; si se queda sin ellos, el patio vuelve a
+          empezar. Es una aventura de plataformas corta y directa, pensada para
+          jugar en el navegador durante un recreo.
+        </p>
+
+        <h1>EL MATE DE LA MATETERA</h1>
+        <p>
+          La novedad del recreo es el <strong>mate</strong>: los enemigos y
+          algunos bloques rotos con el martillo sueltan material (25% de
+          probabilidad). Se guardan hasta 2 y se ceban con <kbd>M</kbd>. Cada mate
+          elige uno de <strong>13 efectos aleatorios</strong>, que pueden ayudar
+          (más salto, velocidad, vida, intentos o martillo más largo) o complicar
+          las cosas (daño, lentitud, mareo, alucinaciones y controles invertidos).
+          El HUD muestra el tiempo restante de cada efecto y la pantalla se llena
+          de estrellas cuando Bruno está mareado o alucinando.
+        </p>
+
+        <h1>ENEMIGOS CON OCURRENCIAS</h1>
+        <p>
+          Los goombas y los koopas ya no caminan en línea recta nomás. Según el
+          momento, hacen el tonto: duermen una siesta, giran como trompo, salen
+          corriendo, patinan, hacen una reverencia, miran a Bruno o dan un paso
+          atrás. Lo hacen con globos de texto arriba, sin cambiar el daño ni el
+          puntaje: es puro chiste para el recreo.
         </p>
 
         <h1>ELEMENTOS DEL JUEGO</h1>
         <p>
           El nivel toma elementos clásicos de <strong>Super Mario Bros.</strong>:
           plataformas, bloques, enemigos, monedas y power-ups. Bruno salta,
-          esquiva obstáculos y golpea con su martillo para avanzar.
+          esquiva obstáculos y golpea con su martillo —con alcance simétrico a
+          ambos lados— para avanzar. La seta recupera un corazón y la estrella
+          aumenta la salud máxima.
         </p>
 
         <h1>BASE: SUPER MARIO BROS. ORIGINAL</h1>
         <p>
           Recreo Pixelado fue hecho en base al Super Mario Bros. original.
           Reutiliza su mecánica de plataformas y la adapta a un escenario escolar
-          con un protagonista propio.
+          con un protagonista propio, nuevos enemigos graciosos y una matetera
+          que decide cómo va a ir el recreo.
         </p>
       </section>
     </main>
@@ -59,9 +95,9 @@
       <div class="info">
         <img src="../src/bruno-logo.png" alt="Bruno Logo" />
         <p>
-          Proyecto escolar desarrollado para la Expotécnica de 6°3 - Laboratorio
-          de Diseño Web. Videojuego de plataformas en una escuela, basado en el
-          Super Mario Bros. original.
+          Proyecto escolar de la <strong>E.E.S.T N°1 “Cecilia Berdichevsky”</strong>,
+          curso 6°3 · Laboratorio de Diseño Web. Recreo Pixelado: un plataformas
+          escolar inspirado en el Super Mario Bros. original.
         </p>
       </div>
       <div class="redes">
@@ -84,14 +120,14 @@
           allowfullscreen=""
           loading="lazy"
           referrerpolicy="strict-origin-when-cross-origin"
-          title="Ubicación"
+          title="Ubicación de la escuela"
         ></iframe>
       </div>
       <div class="enlaces">
         <a href="../../index.html">INICIO</a>
         <a href="historia.html">HISTORIA</a>
         <a href="controles.html">CONTROLES</a>
-        <a href="sobreProyecto.html">SOBRE EL PROYECTO</a>
+        <a href="sobreProyecto.html">PROYECTO</a>
         <a href="../../mario-gh-pages/videojuego.html">¡JUGAR!</a>
       </div>
     </footer>

@@ -5,21 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Controles de Recreo Pixelado: cómo jugar con Bruno en el navegador."
+      content="Controles y mecánicas de Recreo Pixelado: martillo, mate, 13 efectos aleatorios y enemigos goofy."
     />
     <link rel="shortcut icon" href="../src/bruno-logo.png" />
-    <link rel="stylesheet" href="../style/estilos.css" />
+    <link rel="stylesheet" href="../style/estilos.css?v=4" />
     <title>Recreo Pixelado | Controles</title>
   </head>
   <body>
     <header class="encabezado">
-      <img src="../src/bruno-logo.png" alt="Bruno - Recreo Pixelado" />
-      <nav class="menu">
+      <a class="marca" href="../../index.html" aria-label="Recreo Pixelado, inicio">
+        <img src="../src/bruno-logo.png" alt="Bruno - Recreo Pixelado" />
+        <span>RECREO<br />PIXELADO</span>
+      </a>
+      <nav class="menu" aria-label="Navegación principal">
         <a href="../../index.html">INICIO</a>
         <a href="historia.html">HISTORIA</a>
         <a href="controles.html">CONTROLES</a>
-        <a href="sobreProyecto.html">SOBRE EL PROYECTO</a>
-        <a href="../../mario-gh-pages/videojuego.html">¡JUGAR!</a>
+        <a href="sobreProyecto.html">PROYECTO</a>
+        <a class="menu-jugar" href="../../mario-gh-pages/videojuego.html">¡JUGAR!</a>
       </nav>
     </header>
 
@@ -28,17 +31,54 @@
         <h1>CONTROLES DEL JUEGO</h1>
         <p>
           Controlás a Bruno en el navegador con el teclado. El juego arranca solo
-          al cargar la página.
+          al cargar la página y todo transcurre en la
+          <strong>E.E.S.T N°1 “Cecilia Berdichevsky”</strong>.
         </p>
 
         <h1>CONTROLES BÁSICOS</h1>
         <p>
-          <strong>W o X:</strong> Saltar (mantener = salto más alto)<br /><br />
-          <strong>A o ←:</strong> Mover a la izquierda<br /><br />
-          <strong>D o →:</strong> Mover a la derecha<br /><br />
-          <strong>S o ↓:</strong> Agacharse<br /><br />
-          <strong>E o clic izquierdo:</strong> Martillo (recarga de 0,65 s)<br /><br />
-          <strong>↑, Espacio y Enter:</strong> no tienen función en este juego
+          <strong><kbd>W</kbd> o <kbd>X</kbd>:</strong> saltar (mantener = salto más alto)<br /><br />
+          <strong><kbd>A</kbd> o <kbd>←</kbd>:</strong> mover a la izquierda<br /><br />
+          <strong><kbd>D</kbd> o <kbd>→</kbd>:</strong> mover a la derecha<br /><br />
+          <strong><kbd>S</kbd> o <kbd>↓</kbd>:</strong> agacharse<br /><br />
+          <strong><kbd>E</kbd> o clic izquierdo:</strong> martillo (recarga de 0,65 s)<br /><br />
+          <strong><kbd>M</kbd>:</strong> cebar un mate guardado<br /><br />
+          <strong><kbd>↑</kbd>, <kbd>Espacio</kbd> y <kbd>Enter</kbd>:</strong> no tienen función
+        </p>
+
+        <h1>EL MARTILLO</h1>
+        <p>
+          El martillo golpea igual hacia la izquierda que hacia la derecha. Su
+          <strong>alcance base es de 24 px</strong> y el efecto
+          <em>“Martillo más largo”</em> del mate le suma <strong>12 px</strong>
+          durante esa partida. Rompé bloques con él: algunos sueltan material
+          para el mate. El anillo del HUD muestra cuándo vuelve a estar listo.
+        </p>
+
+        <h1>EL MATE</h1>
+        <p>
+          Los enemigos vencidos y los bloques rotos con el martillo tienen una
+          probabilidad del <strong>25%</strong> de soltar material para el mate.
+          Aparece quieto con una animación corta y podés levantarlo recién después
+          de <strong>1 segundo</strong>. Guardás <strong>hasta 2</strong> mates en
+          la matetera del HUD y aparece el aviso
+          <em>“MATERIAL PARA EL MATE OBTENIDO”</em>.
+        </p>
+        <p>
+          Apretá <kbd>M</kbd> para cebar uno: elige uno de <strong>13 efectos
+          aleatorios</strong>. Hay premios (vida, intentos, salto, velocidad y
+          martillo) y castigos (daño, lentitud, mareo, alucinaciones y controles
+          invertidos). El panel <strong>EFECTO ACTIVO</strong> del HUD muestra una
+          barra con el tiempo restante de cada efecto temporal.
+        </p>
+
+        <h1>EFECTOS TEMPORALES</h1>
+        <p>
+          Los efectos duran unos <strong>14 segundos</strong>: el mareo
+          <strong>8 s</strong>, las alucinaciones <strong>10 s</strong> y los
+          controles invertidos <strong>12 s</strong>. Con el mareo y las
+          alucinaciones aparecen <strong>estrellas y símbolos en la pantalla</strong>,
+          además del giro y los colores del juego.
         </p>
 
         <h1>MECÁNICAS</h1>
@@ -47,19 +87,24 @@
           te movés; no hay botón de correr.<br /><br />
           • <strong>Salud:</strong> 3 corazones. Los enemigos que te tocan te
           quitan 1 corazón.<br /><br />
-          • <strong>Pisar enemigos:</strong> vence a los enemigos pisándolos desde
-          arriba.<br /><br />
+          • <strong>Intentos:</strong> cada 15 enemigos derrotados sumás 1 intento
+          (también puede pasarte lo contrario si el mate te sale mal).<br /><br />
+          • <strong>Pisar enemigos:</strong> vencé goombas y koopas pisándolos
+          desde arriba.<br /><br />
           • <strong>Seta:</strong> recupera 1 corazón.<br /><br />
           • <strong>Estrella:</strong> aumenta la salud máxima en 1.<br /><br />
-          • <strong>Martillo:</strong> golpea obstáculos y enemigos; tiene tiempo
-          de recarga visible en el HUD.
+          • <strong>Enemigos goofy:</strong> goombas y koopas hacen ocurrencias
+          aleatorias con globos de texto: siestas, trompos, corridas, patinadas,
+          reverencias, miradas y pasos atrás. No cambian el daño ni el puntaje.
         </p>
 
         <h1>INSTRUCCIONES PARA EMPEZAR</h1>
         <p>
           1. Entrá a ¡JUGAR! desde el menú.<br /><br />
-          2. El nivel carga solo; usá W/A/S/D para mover a Bruno.<br /><br />
-          3. Llegá a la bandera para completar el nivel.
+          2. Mové a Bruno con <kbd>A</kbd>/<kbd>D</kbd>, saltá con <kbd>W</kbd> y
+          usá el martillo con <kbd>E</kbd>.<br /><br />
+          3. Juntá material, apretá <kbd>M</kbd> y mirá qué efecto te toca.<br /><br />
+          4. Llegá al cartel de ESCUELA (checkpoint) y después a la bandera.
         </p>
       </section>
     </main>
@@ -68,9 +113,9 @@
       <div class="info">
         <img src="../src/bruno-logo.png" alt="Bruno Logo" />
         <p>
-          Proyecto escolar desarrollado para la Expotécnica de 6°3 - Laboratorio
-          de Diseño Web. Videojuego de plataformas en una escuela, basado en el
-          Super Mario Bros. original.
+          Proyecto escolar de la <strong>E.E.S.T N°1 “Cecilia Berdichevsky”</strong>,
+          curso 6°3 · Laboratorio de Diseño Web. Recreo Pixelado: un plataformas
+          escolar inspirado en el Super Mario Bros. original.
         </p>
       </div>
       <div class="redes">
@@ -93,14 +138,14 @@
           allowfullscreen=""
           loading="lazy"
           referrerpolicy="strict-origin-when-cross-origin"
-          title="Ubicación"
+          title="Ubicación de la escuela"
         ></iframe>
       </div>
       <div class="enlaces">
         <a href="../../index.html">INICIO</a>
         <a href="historia.html">HISTORIA</a>
         <a href="controles.html">CONTROLES</a>
-        <a href="sobreProyecto.html">SOBRE EL PROYECTO</a>
+        <a href="sobreProyecto.html">PROYECTO</a>
         <a href="../../mario-gh-pages/videojuego.html">¡JUGAR!</a>
       </div>
     </footer>

@@ -4,6 +4,8 @@ var oneone = Mario.oneone = function() {
   //TODO: put as much of this in the Level object definition as possible.
   var schoolTiles = 'src/hojaDeSprites/tilesetExterior.png';
   var interiorTiles = 'src/hojaDeSprites/tilesetEscolar.png';
+  var EXT = 'src/tiles/frames/exterior/';
+  var ESC = 'src/tiles/frames/escolar/';
   var schoolSprite = function(x, y, w, h, destW, destH) {
     var sprite = new Mario.Sprite(schoolTiles, [0,0], [destW || Math.max(16, Math.round(w / 4)), destH || Math.max(16, Math.round(h / 4))], 0, [0]);
     sprite.frameRects = [[x, y, w, h]];
@@ -12,6 +14,76 @@ var oneone = Mario.oneone = function() {
     sprite.phaseX = 1632;
     return sprite;
   };
+
+  // -------------------------------------------------------------------------
+  // Decoración del nivel: sprites de imagen completa, escalados por altura y
+  // anclados al borde inferior del suelo (y = 208) o a una altura concreta.
+  // -------------------------------------------------------------------------
+  var propSpriteCache = {};
+  var propSprite = function(path, height) {
+    var key = path + '|' + height;
+    if (propSpriteCache[key]) return propSpriteCache[key];
+    var img = resources.get(path);
+    var nw = img ? img.width : height;
+    var nh = img ? img.height : height;
+    var dw = Math.max(1, Math.round(nw * height / nh));
+    var sprite = new Mario.Sprite(path, [0,0], [dw, height], 0, [0]);
+    sprite.frameRects = [[0,0,nw,nh]];
+    sprite.frameScale = height / nh;
+    propSpriteCache[key] = sprite;
+    return sprite;
+  };
+
+  var scenerySlots = {};
+  var placeSceneryLeft = function(sprite, left, top, layer) {
+    var slot = Math.floor((left + sprite.size[0] / 2) / 16);
+    var key = layer + ':' + slot;
+    while (scenerySlots[key]) { slot += 1; key = layer + ':' + slot; }
+    scenerySlots[key] = true;
+    level.scenery[layer][slot] = new Mario.Prop([Math.round(left), Math.round(top)], sprite);
+  };
+  var placeScenery = function(sprite, centerX, top, layer) {
+    placeSceneryLeft(sprite, centerX - sprite.size[0] / 2, top, layer);
+  };
+
+  // Muro continuo del interior. Los paneles se encadenan por su ancho real y
+  // el último se recorta contra el borde del tramo para no invadir los huecos.
+  // Muro continuo del interior. Solo se usa el panel _3 como muro de fondo.
+  var wallLook = [
+    ESC + 'ParedDeFondo_3.png'
+  ];
+  var wallSpriteCache = {};
+  var placeWallRun = function(startTile, endTile, height) {
+    var x = startTile * 16;
+    var limit = endTile * 16;
+    var i = 0;
+    while (x < limit) {
+      var path = wallLook[i % wallLook.length];
+      var img = resources.get(path);
+      var nw = img ? img.width : height;
+      var nh = img ? img.height : height;
+      var scale = height / nh;
+      var srcW = nw;
+      var destW = Math.round(nw * scale);
+      var remaining = limit - x;
+      if (remaining < destW) {
+        srcW = Math.max(1, Math.floor(remaining / scale));
+        destW = Math.max(1, Math.round(srcW * scale));
+      }
+      var wkey = path + '|' + height + '|' + srcW;
+      var sprite = wallSpriteCache[wkey];
+      if (!sprite) {
+        sprite = new Mario.Sprite(path, [0,0], [destW, height], 0, [0]);
+        sprite.frameRects = [[0,0,srcW,nh]];
+        sprite.frameScale = scale;
+        wallSpriteCache[wkey] = sprite;
+      }
+      placeSceneryLeft(sprite, x, 208 - height, 8);
+      x += Math.max(8, destW - 1);
+      i += 1;
+    }
+  };
+
   var hammerPickupSprite = function() {
     var sprite = new Mario.Sprite('src/hojaDeSprites/clown-animations.png', [64,280], [24,32], 0, [0]);
     sprite.frameRects = [[64,280,32,40]];
@@ -26,6 +98,15 @@ var oneone = Mario.oneone = function() {
   var goalFlagSprite = new Mario.Sprite('src/tiles/frames/exterior/exterior_14.png', [0,0], [42,65], 0, [0]);
   goalFlagSprite.frameRects = [[0,0,134,208]];
 
+  // Suelo por etapas: pasto en el patio y baldosa escolar en el interior.
+  // Probamos Bloque1, Bloque2 y Bloque3 repetidos; Bloque1 es el único que
+  // mantiene una textura limpia y continua, así que es el suelo del colegio.
+  var stageFloorSprite = new Mario.Sprite('src/BloquesSuelo/Pasto.png', [0,0], [16,16], 0, [0]);
+  stageFloorSprite.frameRects = [[0,0,144,144]];
+  stageFloorSprite.alternateImg = ESC + 'Bloque1.png';
+  stageFloorSprite.alternateFrameRects = [[0,0,130,116]];
+  stageFloorSprite.phaseX = 210 * 16;
+
   level = new Mario.Level({
     playerPos: [56,192],
     loader: Mario.oneone,
@@ -33,7 +114,7 @@ var oneone = Mario.oneone = function() {
     scrolling: true,
     invincibility: [144, 192, 240],
     exit: 422,
-	    floorSprite:  new Mario.Sprite('sprites/tiles.png', [0,32], [16,16], 0),
+	    floorSprite: stageFloorSprite,
     cloudSprite: schoolSprite(1095, 850, 150, 135, 48, 32),
 	    wallSprite: new Mario.Sprite('sprites/tiles.png', [32,32], [16,16], 0),
 	    brickSprite: new Mario.Sprite('sprites/tiles.png', [16,0], [16,16], 0),
@@ -98,11 +179,167 @@ var oneone = Mario.oneone = function() {
     level.putFloor(loc[0],loc[1]);
   });
 
-  //build scenery
-  // Props escolares apoyados en el suelo, nunca flotando en la capa de cielo.
-  [18, 36, 66, 86, 110, 144, 176, 198, 218, 242, 258, 276, 300, 330, 344, 358, 368, 384, 402, 410].forEach(function(prop) {
-    level.putBush(prop, 12);
+  // -------------------------------------------------------------------------
+  // ESCENARIO POR ETAPAS: muros, decoración colgada y props de patio.
+  // Todo se repite de forma explícita y determinista: ningún punto flotante.
+  // -------------------------------------------------------------------------
+  // Muros de fondo del interior (la capa de cielo empieza en y = 144/160).
+  placeWallRun(210, 212, 64);
+  placeWallRun(212, 227, 48);
+  placeWallRun(227, 252, 64);
+  placeWallRun(254, 260, 64);
+  placeWallRun(262, 266, 64);
+  placeWallRun(266, 283, 48);
+  placeWallRun(283, 318, 64);
+  placeWallRun(320, 322, 64);
+  placeWallRun(322, 337, 48);
+  placeWallRun(337, 338, 64);
+  placeWallRun(340, 366, 64);
+  placeWallRun(368, 374, 64);
+  placeWallRun(376, 378, 64);
+  placeWallRun(378, 393, 48);
+  placeWallRun(393, 428, 64);
+
+  // -------------------------------------------------------------------------
+  // EXTERIOR: props de patio sobre el pasto. Nada flotante ni sobre huecos.
+  // -------------------------------------------------------------------------
+  var exteriorGroundProps = [
+    [EXT + 'Arbol_1.png', 2, 64, 144],
+    [EXT + 'Arbol_2.png', 28, 64, 144],
+    [EXT + 'Arbol_4.png', 82, 64, 144],
+    [EXT + 'Arbol_5.png', 112, 56, 152],
+    [EXT + 'Arbol_3.png', 132, 60, 148],
+    [EXT + 'Arbol_1.png', 184, 64, 144],
+    [EXT + 'ArbustoRectanguloLargo.png', 8, 20, 188],
+    [EXT + 'ArbustoRectanguloLargo.png', 66, 20, 188],
+    [EXT + 'ArbustoRectanguloLargo.png', 118, 20, 188],
+    [EXT + 'ArbustoRectanguloLargo.png', 162, 20, 188],
+    [EXT + 'Banco.png', 18, 24, 184],
+    [EXT + 'Banco.png', 52, 24, 184],
+    [EXT + 'Banco.png', 90, 24, 184],
+    [EXT + 'Banco.png', 136, 24, 184],
+    [EXT + 'Banco.png', 160, 24, 184],
+    [EXT + 'Banco.png', 174, 24, 184],
+    [EXT + 'BancaDeMaderaConMesa.png', 30, 28, 180],
+    [EXT + 'Columpio.png', 36, 48, 160],
+    [EXT + 'Tobogan.png', 40, 48, 160],
+    [EXT + 'AroBasketball.png', 76, 48, 160],
+    [EXT + 'Farol.png', 16, 64, 144],
+    [EXT + 'Farol.png', 68, 64, 144],
+    [EXT + 'Farol.png', 130, 64, 144],
+    [EXT + 'Farol.png', 198, 64, 144],
+    [EXT + 'FloresEnMaceta.png', 11, 18, 190],
+    [EXT + 'FloresEnMaceta.png', 25, 18, 190],
+    [EXT + 'FloresEnMaceta.png', 88, 18, 190],
+    [EXT + 'FloresEnMaceta.png', 116, 18, 190],
+    [EXT + 'FloresEnMaceta.png', 172, 18, 190],
+    [EXT + 'FloresEnMaceta.png', 196, 18, 190],
+    [EXT + 'FloresEnMaceta_2.png', 108, 22, 186],
+    [EXT + 'TachoDeBasura.png', 6, 20, 188],
+    [EXT + 'TachoDeBasura.png', 62, 20, 188],
+    [EXT + 'TachoDeBasura.png', 154, 20, 188],
+    [EXT + 'TachoDeBasuraEcologico.png', 102, 20, 188],
+    [EXT + 'Piedra.png', 120, 14, 194],
+    [EXT + 'Cono.png', 20, 16, 192]
+  ];
+  exteriorGroundProps.forEach(function(p) {
+    var sprite = propSprite(p[0], p[2]);
+    placeScenery(sprite, p[1] * 16, p[3], 10);
   });
+
+  // -------------------------------------------------------------------------
+  // INTERIOR: decoración colgada de los muros de pasillo y aulas abiertas.
+  // Los elementos se colocan con su borde superior respetando el techo.
+  // -------------------------------------------------------------------------
+  var hangingProps = [
+    // Pasillo 1: cartel en guía y extintor de pared.
+    [ESC + 'CartelIndicandoAulas.png', 222, 18, 182],
+    // Pasillo 2: relóg y ventana con marco.
+    [ESC + 'Reloj.png', 274, 16, 188],
+    [ESC + 'Ventana.png', 279, 28, 176],
+    // Pasillo 3: relóg, cartel en guía y extintor.
+    [ESC + 'Reloj.png', 330, 16, 192],
+    [ESC + 'CartelIndicandoAulas.png', 334, 18, 182],
+    [ESC + 'Extintor.png', 336.5, 20, 188],
+    // Pasillo final: relóg y cartel en guía.
+    [ESC + 'Reloj.png', 386, 16, 192],
+    [ESC + 'CartelIndicandoAulas.png', 390, 18, 182],
+    // Aula abierta: cartel de fondo.
+    [ESC + 'CartelFondo.png', 236, 24, 176],
+    // Aula abierta: ventana.
+    [ESC + 'Ventana2.png', 242, 36, 164],
+    // Aula abierta: estandarte.
+    [ESC + 'Estandarte.png', 315, 32, 172],
+    // Aula abierta: estandarte.
+    [ESC + 'Estandarte.png', 353, 32, 172],
+    // Aula abierta: tablero de apuntes.
+    [ESC + 'TablonDeApuntes.png', 306, 24, 176],
+    // Aula abierta: pizarra.
+    [ESC + 'Pizarra.png', 311, 26, 178],
+    // Aula abierta: ventana.
+    [ESC + 'Ventana3.png', 344.5, 36, 164]
+  ];
+  hangingProps.forEach(function(p) {
+    var sprite = propSprite(p[0], p[2]);
+    placeScenery(sprite, Math.round(p[1] * 16 - sprite.size[0] / 2), p[3], 9);
+  });
+
+  // -------------------------------------------------------------------------
+  // INTERIOR: props de interior sobre el suelo escolar. Los elementos de
+  // pared quedan por encima del suelo y debajo del techo del pasillo o aula.
+  // -------------------------------------------------------------------------
+  var interiorGroundProps = [
+    // Casilleros en cada pasillo.
+    [ESC + 'Casilleros.png', 217, 32, 176],
+    [ESC + 'Casilleros.png', 271, 32, 176],
+    [ESC + 'Casilleros.png', 326, 32, 176],
+    [ESC + 'Casilleros.png', 382, 32, 176],
+    // Puertas de aula.
+    [ESC + 'Puerta.png', 228, 44, 164],
+    [ESC + 'Puerta.png', 258, 44, 164],
+    [ESC + 'Puerta.png', 284, 44, 164],
+    [ESC + 'Puerta.png', 321, 44, 164],
+    [ESC + 'Puerta.png', 342, 44, 164],
+    [ESC + 'Puerta.png', 372.5, 40, 168],
+    [ESC + 'Puerta.png', 410, 44, 164],
+    // Puertas dobles.
+    [ESC + 'PuertasDoble.png', 249, 44, 164],
+    [ESC + 'PuertasDoble.png', 424, 48, 156],
+    // Estanterías.
+    [ESC + 'EstanteDeLibros.png', 232, 36, 172],
+    [ESC + 'EstanteDeLibros.png', 287, 36, 172],
+    [ESC + 'EstanteDeLibros.png', 406, 36, 172],
+    // Pupitres.
+    [ESC + 'Pupitre.png', 240, 32, 176],
+    [ESC + 'Pupitre.png', 302, 32, 176],
+    [ESC + 'Pupitre.png', 360, 32, 176],
+    // Sillas.
+    [ESC + 'Silla.png', 243, 24, 184],
+    [ESC + 'Silla.png', 305.5, 24, 184],
+    [ESC + 'Silla.png', 363.5, 24, 184],
+    // Lavamanos de pared.
+    [ESC + 'Lavamanos.png', 255, 28, 176],
+    [ESC + 'Lavamanos.png', 297, 28, 176],
+    [ESC + 'Lavamanos.png', 370, 28, 176],
+    // Plantas.
+    [ESC + 'PlantaEnMaceta.png', 246, 28, 180],
+    [ESC + 'PlantaEnMaceta.png', 307, 28, 180],
+    [ESC + 'PlantaEnMaceta.png', 337, 28, 180],
+    [ESC + 'PlantaEnMaceta.png', 413.8, 28, 180],
+    // Tachos.
+    [ESC + 'TachoDeBasura.png', 331, 20, 188],
+    [ESC + 'TachoDeBasura.png', 352, 20, 188],
+    [ESC + 'TachoDeBasura.png', 412, 20, 188],
+    // Extintores de pared.
+    [ESC + 'Extintor.png', 335, 20, 188],
+    [ESC + 'Extintor.png', 418, 20, 188]
+  ];
+  interiorGroundProps.forEach(function(p) {
+    var sprite = propSprite(p[0], p[2]);
+    placeScenery(sprite, p[1] * 16, p[3], 10);
+  });
+
+
 
   // ---------------------------------------------------------------------
   // PRIMERA MITAD: plataformeo simple y amable.

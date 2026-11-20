@@ -186,6 +186,7 @@
     sounds.kick.currentTime = 0;
     sounds.kick.play();
     if (Mario.registerKill) Mario.registerKill(this);
+    if (Mario.onGoblinDefeated) Mario.onGoblinDefeated(this);
   };
 
   Goblin.prototype.remove = function() {

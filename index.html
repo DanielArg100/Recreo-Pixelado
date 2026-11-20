@@ -5,50 +5,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Recreo Pixelado: videojuego de plataformas en una escuela. Controlás a Bruno, un payaso triste, en un nivel inspirado en el Super Mario Bros. original."
+      content="Recreo Pixelado: plataformas, martillos y mates en una escuela. Jugá con Bruno, el payaso triste, en el navegador. Proyecto de la E.E.S.T N°1 Cecilia Berdichevsky."
     />
     <link rel="shortcut icon" href="./SitioWeb/src/bruno-logo.png" />
-    <link rel="stylesheet" href="SitioWeb/style/estilos.css" />
-    <title>Recreo Pixelado | Inicio</title>
+    <link rel="stylesheet" href="SitioWeb/style/estilos.css?v=4" />
+    <title>Recreo Pixelado | El recreo se volvió pixel</title>
   </head>
-  <body>
+  <body class="pagina-inicio">
     <header class="encabezado">
-      <img src="./SitioWeb/src/bruno-logo.png" alt="Bruno - Recreo Pixelado" />
-      <nav class="menu">
+      <a class="marca" href="index.html" aria-label="Recreo Pixelado, inicio">
+        <img src="./SitioWeb/src/bruno-logo.png" alt="Bruno - Recreo Pixelado" />
+        <span>RECREO<br />PIXELADO</span>
+      </a>
+      <nav class="menu" aria-label="Navegación principal">
         <a href="SitioWeb/Pages/historia.html">HISTORIA</a>
         <a href="SitioWeb/Pages/controles.html">CONTROLES</a>
-        <a href="SitioWeb/Pages/sobreProyecto.html">SOBRE EL PROYECTO</a>
-        <a href="./mario-gh-pages/videojuego.html">¡JUGAR!</a>
+        <a href="SitioWeb/Pages/sobreProyecto.html">PROYECTO</a>
+        <a class="menu-jugar" href="./mario-gh-pages/videojuego.html">¡JUGAR!</a>
       </nav>
     </header>
 
-    <main>
-      <section class="tarjeta">
-        <img src="SitioWeb/src/PayasoTriste.png" alt="Bruno, el payaso triste" />
-        <h1>BRUNO, EL PAYASO TRISTE</h1>
-        <p>
-          Controlás a Bruno, un payaso triste que recorre la escuela durante el
-          recreo. Saltá, esquivá y golpeá con tu martillo para llegar a la
-          bandera.
-        </p>
+    <main class="inicio">
+      <section class="hero-inicio">
+        <div class="hero-copy">
+          <span class="hero-stamp">🎒 PROYECTO ESCOLAR · EXPO 2026</span>
+          <h1>EL RECREO<br /><span>SE VOLVIÓ PIXEL</span></h1>
+          <p class="hero-lead">
+            Bruno es un payaso triste con un martillo, dos etapas por recorrer y
+            una matetera que no sabe lo que viene. Saltá bloques, esquivá goblins
+            y descubrí qué efecto aleatorio te toma por sorpresa.
+          </p>
+          <div class="hero-acciones">
+            <a class="boton boton-principal" href="./mario-gh-pages/videojuego.html">
+              ▶ JUGAR AHORA
+            </a>
+            <a class="boton boton-secundario" href="SitioWeb/Pages/controles.html">
+              VER CONTROLES
+            </a>
+          </div>
+          <ul class="hero-chips" aria-label="Datos del juego">
+            <li>2 ETAPAS</li>
+            <li>13 EFECTOS</li>
+            <li>3 INTENTOS</li>
+            <li>MATE RARO</li>
+          </ul>
+        </div>
+
+        <div class="hero-arte">
+          <div class="hero-marco">
+            <img src="SitioWeb/src/PayasoTriste.png" alt="Bruno, el payaso triste" />
+            <span class="hero-etiqueta">BRUNO · EL PROTAGONISTA</span>
+          </div>
+          <span class="hero-flotante hero-flotante-mate">🧉 ¡MATE LISTO!</span>
+          <span class="hero-flotante hero-flotante-martillo">🔨 MARTILLO LARGO</span>
+          <span class="hero-flotante hero-flotante-estrella">★ EFECTOS LOCOS</span>
+        </div>
       </section>
 
-      <section class="tarjeta">
-        <img src="SitioWeb/src/Mario.png" alt="El nivel de la escuela" />
-        <h1>UN NIVEL EN LA ESCUELA</h1>
-        <p>
-          Un solo nivel ambientado en una escuela: aulas, patio y pasillos.
-          Elementos clásicos de Super Mario Bros. adaptados al recreo.
-        </p>
+      <section class="franja-novedades" aria-labelledby="titulo-novedades">
+        <div class="franja-cabecera">
+          <span class="franja-kicker">ACTUALIZADO PARA LA EXPO</span>
+          <h2 id="titulo-novedades">LO NUEVO EN EL RECREO</h2>
+        </div>
+        <div class="novedades-grid">
+          <article class="novedad">
+            <span class="novedad-icono" aria-hidden="true">🧉</span>
+            <h3>EL MATE</h3>
+            <p>
+              Los enemigos y los bloques rotos con el martillo sueltan material
+              para el mate. Guardá 2, apretá <kbd>M</kbd> y que decida la suerte.
+            </p>
+          </article>
+          <article class="novedad">
+            <span class="novedad-icono" aria-hidden="true">🎲</span>
+            <h3>13 EFECTOS</h3>
+            <p>
+              Salto, velocidad, vidas, martillo más largo, mareo, alucinaciones y
+              controles invertidos. El HUD muestra cuánto falta para que terminen.
+            </p>
+          </article>
+          <article class="novedad">
+            <span class="novedad-icono" aria-hidden="true">🤡</span>
+            <h3>ENEMIGOS GOOFY</h3>
+            <p>
+              Goombas y Koopas ahora hacen ocurrencias: siestas, trompos,
+              reverencias y patinadas con globos de texto.
+            </p>
+          </article>
+          <article class="novedad">
+            <span class="novedad-icono" aria-hidden="true">🔨</span>
+            <h3>MARTILLO MEJORADO</h3>
+            <p>
+              Alcance base más largo, golpe simétrico a ambos lados y un extra
+              temporal cuando el mate te da suerte.
+            </p>
+          </article>
+        </div>
       </section>
 
-      <section class="tarjeta">
-        <img src="SitioWeb/src/MandoNes.webp" alt="Jugar ahora" />
-        <h1>¡JUGÁ AHORA!</h1>
-        <p>
-          Experimentá Recreo Pixelado directamente en tu navegador, sin descargas.
-          Hecho sobre la base del Super Mario Bros. original.
-        </p>
+      <section class="seccion-jugar" aria-labelledby="titulo-listo">
+        <div class="tarjeta-listo">
+          <span class="listo-kicker">AULA 1-1 · TE ESPERA</span>
+          <h2 id="titulo-listo">¿LISTO PARA EL RECREO?</h2>
+          <p>
+            Entrá al juego, llegá hasta la bandera y fijate si el mate te ayuda…
+            o te complica. Todo pasa en la
+            <strong>E.E.S.T N°1 “Cecilia Berdichevsky”</strong>.
+          </p>
+          <a class="boton boton-principal" href="./mario-gh-pages/videojuego.html">
+            ▶ EMPEZAR A JUGAR
+          </a>
+        </div>
+        <div class="tarjeta-atajos">
+          <h3>ATAJOS RÁPIDOS</h3>
+          <p><kbd>W</kbd> Saltar</p>
+          <p><kbd>A</kbd> <kbd>D</kbd> Mover</p>
+          <p><kbd>E</kbd> Martillo</p>
+          <p><kbd>M</kbd> Cebar mate</p>
+          <a href="SitioWeb/Pages/controles.html">VER TODOS LOS CONTROLES →</a>
+        </div>
       </section>
     </main>
 
@@ -56,9 +131,9 @@
       <div class="info">
         <img src="./SitioWeb/src/bruno-logo.png" alt="Bruno Logo" />
         <p>
-          Proyecto escolar desarrollado para la Expotécnica de 6°3 - Laboratorio
-          de Diseño Web. Videojuego de plataformas en una escuela, basado en el
-          Super Mario Bros. original.
+          Proyecto escolar de la <strong>E.E.S.T N°1 “Cecilia Berdichevsky”</strong>,
+          curso 6°3 · Laboratorio de Diseño Web. Un plataformas escolar inspirado
+          en el Super Mario Bros. original.
         </p>
       </div>
       <div class="redes">
@@ -81,13 +156,13 @@
           allowfullscreen=""
           loading="lazy"
           referrerpolicy="strict-origin-when-cross-origin"
-          title="Ubicación"
+          title="Ubicación de la escuela"
         ></iframe>
       </div>
       <div class="enlaces">
         <a href="SitioWeb/Pages/historia.html">HISTORIA</a>
         <a href="SitioWeb/Pages/controles.html">CONTROLES</a>
-        <a href="SitioWeb/Pages/sobreProyecto.html">SOBRE EL PROYECTO</a>
+        <a href="SitioWeb/Pages/sobreProyecto.html">PROYECTO</a>
         <a href="./mario-gh-pages/videojuego.html">¡JUGAR!</a>
       </div>
     </footer>

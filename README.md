@@ -1,127 +1,85 @@
-# 🍄 Super Mario Bros. — Expotécnica
+# 🧉 Recreo Pixelado — Expotécnica
 
-> Proyecto escolar desarrollado para la **Expotécnica** de **6°3**, en la materia **Laboratorio de Diseño Web**.
+> Proyecto escolar desarrollado para la **Expotécnica** de **6°3**, en la materia **Laboratorio de Diseño Web** de la **E.E.S.T N°1 "Cecilia Berdichevsky"**.
 
 ## 📖 Sobre el proyecto
 
-Este proyecto consiste en el desarrollo de un **sitio web dedicado al videojuego Super Mario Bros.**, combinando contenido informativo sobre el juego con una versión web jugable del mismo.
+**Recreo Pixelado** es un sitio web dedicado a un videojuego de plataformas propio: controlás a **Bruno, un payaso triste**, que recorre la escuela durante el recreo. Todo transcurre en la **E.E.S.T N°1 "Cecilia Berdichevsky"**: el patio, los pasillos y las aulas son el escenario del juego.
 
-El sitio cuenta con diferentes páginas destinadas a presentar información relacionada con **Super Mario Bros.**, su historia y características, además de una sección donde los visitantes pueden **jugar directamente desde el navegador**.
+El sitio combina contenido informativo (inicio, historia, controles y sobre el proyecto) con una versión jugable directamente en el navegador. El juego se construyó a partir del proyecto **Full Screen Mario**, sobre el cual se hicieron modificaciones y adaptaciones propias, y toma como referencia el **Super Mario Bros. original** de Nintendo.
 
-El videojuego utilizado como base fue desarrollado a partir del proyecto **Full Screen Mario**, sobre el cual se realizaron modificaciones y adaptaciones para incorporarlo al proyecto de la Expotécnica.
-
-Uno de los principales objetivos fue no limitarse a presentar el juego original, sino desarrollar una experiencia propia mediante la creación de **niveles personalizados**, además de adaptar distintos elementos del proyecto a la temática y objetivos de nuestro sitio web.
-
----
+Uno de los objetivos principales fue no limitarse a mostrar el juego original, sino crear una **experiencia propia** con un nivel personalizado de dos etapas y mecánicas nuevas.
 
 ## 🎮 Características
 
-- 🌐 Sitio web dedicado a **Super Mario Bros.**
-- 📚 Páginas con información relacionada con el videojuego.
-- 🕹️ Juego completamente jugable desde el navegador.
-- 🧱 **Niveles personalizados** diseñados especialmente para el proyecto.
-- 🎨 Adaptación y modificación de elementos del juego.
-- 🔊 Utilización y adaptación de recursos audiovisuales del proyecto base.
-- 💻 Funcionamiento directamente desde una página web, sin necesidad de instalar un programa adicional.
+- 🌐 Sitio web completo: inicio rediseñado, historia, controles y proyecto.
+- 🕹️ Juego jugable en el navegador, en **dos etapas**, con checkpoint y bandera.
+- 🔨 **Martillo** con alcance base de 24 px, golpe simétrico a ambos lados y refuerzo temporal de +12 px.
+- 🧉 **Mate**: los enemigos y los bloques rotos con el martillo sueltan material con 25% de probabilidad; se guardan hasta 2 y se ceban con **M**.
+- 🎲 **13 efectos aleatorios** con HUD de cuenta regresiva: salto, vida, intentos, velocidad, martillo, mareo, alucinaciones y controles invertidos, entre otros.
+- ★ **Estrellas y símbolos en pantalla** durante el mareo y las alucinaciones.
+- 🤡 **Enemigos goofy**: goombas y koopas con ocurrencias aleatorias y globos de texto.
+- 💻 Funcionamiento directo desde la web, sin instalar nada.
 
----
+## 🧉 El mate
 
-## 🕹️ El videojuego
+Al vencer enemigos o romper bloques con el martillo aparece material para el mate (`Mario.MATE_DROP_CHANCE = 0.25`). El ítem queda quieto, aparece con una animación breve y se puede levantar recién después de 1 segundo. Aparece el aviso **"MATERIAL PARA EL MATE OBTENIDO"**.
 
-La sección principal del proyecto permite acceder a una versión web jugable de **Super Mario Bros.**
+La matetera del HUD guarda **hasta 2** mates. Con **M** se ceba uno y se aplica uno de los **13 efectos** definidos en `Mario.MATE_EFFECTS`:
 
-Para su desarrollo se utilizó como base el proyecto **Full Screen Mario**, un proyecto que implementa una versión de Super Mario Bros. utilizando tecnologías web.
+| Efecto | Tipo | Duración |
+|---|---|---|
+| ¡Saltarás más! | extra | 14 s |
+| ¡Te curaste! | premio | instantáneo |
+| ¡El mate te pegó! | castigo | instantáneo |
+| +1 vida máxima / -1 vida máxima | variable | permanente en la partida |
+| +1 intento / -1 intento | variable | instantáneo |
+| Más rápido / Más lento | variable | 14 s |
+| Martillo más largo | extra | permanente en la partida |
+| ¡Estás mareo! | castigo | 8 s |
+| ¡Alucinando! | extra | 10 s |
+| Controles invertidos | castigo | 12 s |
 
-A partir de esta base se trabajó sobre diferentes elementos del juego, especialmente en el diseño de **niveles personalizados**, buscando crear desafíos diferentes a los encontrados en los niveles originales.
+El panel **EFECTO ACTIVO** del HUD muestra cuánto falta para que terminen los efectos temporales.
 
-De esta manera, el proyecto combina el trabajo de investigación y desarrollo web con la modificación de un videojuego existente.
+## 🕹️ Controles
 
----
+| Tecla | Acción |
+|---|---|
+| **W** / **X** | Saltar (mantener = salto más alto) |
+| **A** / **←** | Mover a la izquierda |
+| **D** / **→** | Mover a la derecha |
+| **S** / **↓** | Agacharse |
+| **E** / clic izquierdo | Martillo (recarga de 0,65 s) |
+| **M** | Cebar un mate guardado |
 
-## 🧩 Niveles personalizados
+Bruno corre automáticamente; no hay tecla de correr. **↑**, **Espacio** y **Enter** no tienen función.
 
-Una de las partes principales del proyecto consiste en el diseño de niveles propios.
+## 🧩 Nivel personalizado
 
-Los niveles fueron creados utilizando la estructura proporcionada por **Full Screen Mario**, modificando elementos como:
+El nivel usa la estructura de Full Screen Mario pero modifica la distribución del escenario, plataformas, enemigos, obstáculos, tuberías, bloques, objetos y dificultad. Tiene dos etapas (exterior y pasillos), un cartel de ESCUELA como checkpoint, torretas goblin y la bandera de salida. Los goombas y koopas hacen ocurrencias graciosas (siesta, trompo, corrida, patinada, reverencia, mirada y paso atrás) sin alterar daño ni puntaje.
 
-- Distribución del escenario.
-- Plataformas.
-- Enemigos.
-- Obstáculos.
-- Tuberías.
-- Bloques.
-- Objetos.
-- Recorridos del jugador.
-- Dificultad y desafíos.
-
-El objetivo es que cada nivel presente una experiencia diferente y que el jugador tenga que aprender y adaptarse a los distintos desafíos.
-
----
 ## 🛠️ Tecnologías utilizadas
 
-El proyecto utiliza principalmente tecnologías web, entre ellas:
-
-- **HTML5** — Estructura de las páginas.
-- **CSS3** — Diseño y estilos.
-- **JavaScript** — Lógica e interacción.
-- **Canvas** — Renderizado de elementos del videojuego.
-
-Además, se utilizó como base el proyecto **Full Screen Mario** para la implementación del videojuego.
-
----
+- **HTML5** — estructura de las páginas.
+- **CSS3** — diseño del sitio, HUD y overlay de efectos.
+- **JavaScript** — lógica del juego, drop del mate y efectos aleatorios.
+- **Canvas** — renderizado del videojuego.
 
 ## 📚 Proyecto base
 
-Este proyecto utiliza como referencia y base de desarrollo:
+Se usa como referencia y base de desarrollo **Full Screen Mario**, un proyecto web que recrea Super Mario Bros. con HTML, CSS y JavaScript.
 
-**Full Screen Mario**
-
-Full Screen Mario es un proyecto web que recrea Super Mario Bros. utilizando tecnologías como HTML, CSS y JavaScript.
-
-A partir de dicho proyecto se realizaron modificaciones y adaptaciones destinadas específicamente a esta propuesta escolar.
-
-> ⚠️ **Importante:** Full Screen Mario no fue desarrollado originalmente por nuestro equipo. El presente proyecto parte de dicho trabajo como base y agrega modificaciones propias para la Expotécnica.
-
----
+> ⚠️ **Importante:** Full Screen Mario no fue desarrollado originalmente por nuestro equipo. Este proyecto parte de ese trabajo como base y agrega modificaciones propias para la Expotécnica.
 
 ## 🎓 Contexto académico
 
-Este proyecto fue realizado en el marco de la **Expotécnica escolar**.
-
-**Institución:** Cecilia Berdichevsky.  
+**Institución:** E.E.S.T N°1 "Cecilia Berdichevsky"  
 **Curso:** 6°3  
 **Materia:** Laboratorio de Diseño Web  
 **Profesor:** Pablo Gareis 🐍  
-**Proyecto:** Sitio web sobre Super Mario Bros.
-
----
-
-## 🚀 Objetivos del proyecto
-
-Los principales objetivos fueron:
-
-1. Aplicar conocimientos de desarrollo web adquiridos durante el ciclo lectivo.
-2. Crear un sitio web funcional y accesible desde un navegador.
-3. Integrar un videojuego dentro de una página web.
-4. Comprender y modificar código JavaScript existente.
-5. Diseñar niveles personalizados.
-6. Combinar investigación, diseño y programación en un proyecto único.
-7. Presentar el resultado como parte de la **Expotécnica**.
-
----
-
-## 📌 Estado del proyecto
-
-🟢 **En desarrollo**
-
-El proyecto se encuentra en proceso de desarrollo y puede recibir nuevas modificaciones, mejoras y contenido antes de su presentación final.
-
----
+**Proyecto:** Recreo Pixelado — sitio web y videojuego
 
 ## ❤️ Créditos
 
-Proyecto realizado con fines **educativos y escolares** para la Expotécnica.
-
-El videojuego se desarrolló tomando como base el proyecto **Full Screen Mario**, sobre el cual se realizaron modificaciones y adaptaciones propias.
-
-**Super Mario Bros.** es una propiedad intelectual de **Nintendo**. Este proyecto escolar no pretende reclamar propiedad sobre el videojuego, sus personajes o sus elementos originales.
+Proyecto realizado con fines **educativos y escolares** para la Expotécnica. **Super Mario Bros.** es propiedad intelectual de **Nintendo**; este proyecto escolar no reclama propiedad sobre el videojuego, sus personajes ni sus elementos originales.

@@ -19,24 +19,106 @@
 		this.vel[0] = -0.5;
 		this.chargeTimer = 2 + Math.random() * 3;
 		this.idx = level.enemies.length;
+
+		// Ocurrencias goofy: se activan de vez en cuando y duran poco.
+		this.goofy = null;
+		this.goofyTimer = 1.5 + Math.random() * 3;
+		this.goofyTime = 0;
+		this.goofyDuration = 0;
+		this.goofyVel = 0;
+		this.goofySpin = 0;
+		this.goofyFace = null;
+		this.bubble = '';
+		this.bubbleLift = 0;
   };
 
+  var GOOFY_ACTS = ['skate', 'bow', 'peek', 'backstep', 'tumble'];
+
   Koopa.prototype.render = function(ctx, vX, vY) {
-    this.sprite.render(ctx, this.pos[0], this.pos[1], vX, vY);
+    Mario.Goofy.drawSprite(ctx, this.sprite, this, vX, vY, this.goofySpin);
+    Mario.Goofy.drawBubble(ctx, this, vX, vY);
+  };
+
+  Koopa.prototype.startGoofy = function() {
+    if (this.shell || this.flipping || this.dying) return;
+    var act = Mario.Goofy.pick(GOOFY_ACTS);
+    this.goofy = act;
+    this.goofyTime = 0;
+    this.goofyDuration = act === 'skate' ? 0.6 + Math.random() * 0.4
+      : act === 'bow' ? 0.9 + Math.random() * 0.4
+      : 0.7 + Math.random() * 0.5;
+    this.goofyVel = this.vel[0];
+    this.goofyFace = null;
+    if (act === 'skate') {
+      this.vel[0] = (this.goofyVel < 0 ? -1 : 1) * 2;
+      this.bubble = '¡¡';
+    } else if (act === 'bow') {
+      this.vel[0] = 0;
+      this.bubble = '♪';
+    } else if (act === 'peek') {
+      this.vel[0] = this.goofyVel * 0.25;
+      this.goofyFace = player && player.pos[0] < this.pos[0];
+      this.bubble = '¡!';
+    } else if (act === 'backstep') {
+      this.vel[0] = -this.goofyVel * 0.8;
+      this.bubble = '¿?';
+    } else {
+      this.vel[0] = this.goofyVel * 0.3;
+      this.bubble = '★';
+    }
+  };
+
+  Koopa.prototype.updateGoofy = function(dt) {
+    if (this.shell || this.flipping || this.dying) {
+      this.goofy = null;
+      this.goofySpin = 0;
+      this.goofyFace = null;
+      this.bubble = '';
+      this.bubbleLift = 0;
+      return;
+    }
+    if (!this.goofy) {
+      this.goofyTimer -= dt;
+      if (this.goofyTimer <= 0) this.startGoofy();
+      return;
+    }
+
+    this.goofyTime += dt;
+    var p = Math.min(1, this.goofyTime / this.goofyDuration);
+    this.bubbleLift = Math.sin(p * Math.PI) * 3;
+    if (this.goofy === 'bow') {
+      this.goofySpin = Math.sin(p * Math.PI) * 0.6;
+    } else if (this.goofy === 'tumble') {
+      this.goofySpin = p * Math.PI * 4;
+    }
+
+    if (p >= 1) {
+      this.vel[0] = this.goofyVel;
+      this.goofy = null;
+      this.goofySpin = 0;
+      this.goofyFace = null;
+      this.bubble = '';
+      this.bubbleLift = 0;
+      this.goofyTimer = 2 + Math.random() * 3.5;
+    }
   };
 
   Koopa.prototype.update = function(dt, vX) {
     if (this.turn) {
       this.vel[0] = -this.vel[0];
+      if (this.goofy) this.goofyVel = -this.goofyVel;
       if (this.shell) sounds.bump.play();
       this.turn = false;
     }
+    this.updateGoofy(dt);
 		this.chargeTimer -= dt;
-		if (!this.shell && this.chargeTimer <= 0 && Math.abs(this.pos[0] - player.pos[0]) < 88) {
+		if (!this.shell && !this.goofy && this.chargeTimer <= 0 && Math.abs(this.pos[0] - player.pos[0]) < 88) {
 			this.vel[0] = player.pos[0] < this.pos[0] ? -1.8 : 1.8;
 			this.chargeTimer = 3 + Math.random() * 2;
 		}
-		if (this.vel[0] != 0) {
+		if (this.goofyFace !== null) {
+      this.left = this.goofyFace;
+    } else if (this.vel[0] != 0) {
       this.left = (this.vel[0] < 0);
     }
 

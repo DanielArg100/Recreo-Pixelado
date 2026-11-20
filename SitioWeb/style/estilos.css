@@ -47,15 +47,9 @@ body {
   font-family: var(--fuente-texto);
   color: var(--tinta);
   line-height: 1.6;
+  /* Fondo liso: las nubes de tiza tapaban parte del texto. */
   background-color: var(--pizarra);
-  /* Nubes dibujadas con tiza sobre el pizarrón */
-  background-image:
-    radial-gradient(circle at 32px 34px, rgba(253, 252, 247, 0.92) 12px, transparent 13px),
-    radial-gradient(circle at 58px 24px, rgba(253, 252, 247, 0.92) 16px, transparent 17px),
-    radial-gradient(circle at 84px 34px, rgba(253, 252, 247, 0.92) 12px, transparent 13px),
-    radial-gradient(46px 14px at 58px 40px, rgba(253, 252, 247, 0.92) 99%, transparent 100%);
-  background-size: 240px 90px;
-  background-repeat: repeat;
+  background-image: none;
 }
 
 a {
@@ -226,6 +220,15 @@ main::after {
   color: var(--rojo-oscuro);
 }
 
+.tarjetaControles kbd {
+  font-family: var(--fuente-chica);
+  font-size: 0.75em;
+  color: var(--papel);
+  background-color: var(--pizarra-oscuro);
+  border-radius: 3px;
+  padding: 0.2em 0.4em;
+}
+
 /* ---------- Pie de página (galpón del colegio) ---------- */
 .piePagina {
   position: relative;
@@ -372,5 +375,451 @@ main::after {
   .redes > div a:hover,
   .tarjeta:hover {
     transform: none;
+  }
+
+  .boton,
+  .hero-flotante,
+  .novedad {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* ============================================================
+   INICIO REDISEÑADO — hero, novedades y llamado a jugar
+   ============================================================ */
+
+/* Marca del encabezado (logo + nombre) */
+.encabezado .marca {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.encabezado .marca img {
+  height: 52px;
+  width: auto;
+}
+
+.encabezado .marca span {
+  font-family: var(--fuente-pixel);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--amarillo-lapiz);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55);
+}
+
+.menu .menu-jugar {
+  background-color: var(--rojo-manzana);
+  border: 3px solid var(--tinta);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45);
+  padding: 0.55rem 0.9rem;
+  color: var(--tiza);
+}
+
+.menu .menu-jugar:hover,
+.menu .menu-jugar:focus-visible {
+  background-color: var(--amarillo-lapiz);
+  color: var(--tinta);
+}
+
+/* La portada apila secciones a lo ancho, a diferencia del main genérico */
+.pagina-inicio main.inicio {
+  display: block;
+  padding: 3rem 2rem 7rem;
+}
+
+/* ---------- Hero ---------- */
+.hero-inicio {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: 3rem;
+  max-width: 1180px;
+  margin: 0 auto 4rem;
+}
+
+.hero-stamp,
+.franja-kicker,
+.listo-kicker {
+  display: inline-block;
+  font-family: var(--fuente-chica);
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  color: var(--pizarra-oscuro);
+  background-color: var(--amarillo-lapiz);
+  border: 3px solid var(--tinta);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.4);
+  padding: 0.55rem 0.7rem;
+  transform: rotate(-1.5deg);
+}
+
+.hero-copy h1 {
+  font-family: var(--fuente-pixel);
+  font-size: clamp(1.9rem, 5vw, 3.4rem);
+  font-weight: normal;
+  line-height: 1.45;
+  color: var(--tiza);
+  text-shadow: 4px 4px 0 var(--pizarra-oscuro), 6px 6px 0 rgba(0, 0, 0, 0.35);
+  margin: 1.5rem 0 1.25rem;
+}
+
+.hero-copy h1 span {
+  color: var(--amarillo-lapiz);
+}
+
+.hero-lead {
+  font-size: 1.05rem;
+  color: var(--papel);
+  max-width: 55ch;
+  margin: 0 0 2rem;
+}
+
+.hero-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--fuente-chica);
+  font-size: 0.72rem;
+  text-align: center;
+  padding: 1rem 1.2rem;
+  border: 4px solid var(--tinta);
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.45);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.boton:hover,
+.boton:focus-visible {
+  transform: translate(-2px, -3px);
+  box-shadow: 7px 8px 0 rgba(0, 0, 0, 0.45);
+}
+
+.boton:focus-visible {
+  outline: 2px dashed var(--tiza);
+  outline-offset: 4px;
+}
+
+.boton-principal {
+  background-color: var(--rojo-manzana);
+  color: var(--tiza);
+}
+
+.boton-principal:hover,
+.boton-principal:focus-visible {
+  background-color: var(--amarillo-lapiz);
+  color: var(--tinta);
+}
+
+.boton-secundario {
+  background-color: var(--papel);
+  color: var(--tinta);
+}
+
+.boton-secundario:hover,
+.boton-secundario:focus-visible {
+  background-color: var(--azul-tiza);
+}
+
+.hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hero-chips li {
+  font-family: var(--fuente-chica);
+  font-size: 0.58rem;
+  color: var(--tiza);
+  border: 2px solid var(--tiza);
+  padding: 0.5rem 0.6rem;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Arte del hero: retrato enmarcado + etiquetas flotantes */
+.hero-arte {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-marco {
+  position: relative;
+  width: min(360px, 100%);
+  background-color: var(--papel);
+  border: 8px solid var(--marco-madera);
+  box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.45), inset 0 0 0 4px var(--pizarra);
+  padding: 1.5rem 1.5rem 0;
+  transform: rotate(2deg);
+}
+
+.hero-marco img {
+  width: 100%;
+  height: 300px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.hero-etiqueta {
+  display: block;
+  font-family: var(--fuente-chica);
+  font-size: 0.6rem;
+  text-align: center;
+  color: var(--papel);
+  background-color: var(--pizarra-oscuro);
+  margin: 0 -1.5rem;
+  padding: 0.8rem 0.5rem;
+}
+
+.hero-flotante {
+  position: absolute;
+  font-family: var(--fuente-chica);
+  font-size: 0.6rem;
+  color: var(--tinta);
+  background-color: var(--papel);
+  border: 3px solid var(--tinta);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.45);
+  padding: 0.6rem 0.7rem;
+  animation: flotar 2.8s ease-in-out infinite;
+}
+
+.hero-flotante-mate {
+  top: 4%;
+  left: 0;
+  transform: rotate(-6deg);
+}
+
+.hero-flotante-martillo {
+  bottom: 16%;
+  right: 0;
+  transform: rotate(5deg);
+  animation-delay: -0.9s;
+}
+
+.hero-flotante-estrella {
+  bottom: -2%;
+  left: 2%;
+  transform: rotate(-3deg);
+  animation-delay: -1.7s;
+}
+
+@keyframes flotar {
+  0%, 100% { margin-top: 0; }
+  50% { margin-top: -9px; }
+}
+
+/* ---------- Novedades ---------- */
+.franja-novedades {
+  max-width: 1180px;
+  margin: 0 auto 4rem;
+}
+
+.franja-cabecera {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.franja-cabecera h2 {
+  font-family: var(--fuente-pixel);
+  font-size: clamp(1.1rem, 3.2vw, 1.8rem);
+  font-weight: normal;
+  line-height: 1.5;
+  color: var(--tiza);
+  text-shadow: 3px 3px 0 var(--pizarra-oscuro);
+  margin: 1rem 0 0;
+}
+
+.novedades-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.5rem;
+}
+
+.novedad {
+  background-color: var(--papel);
+  border: 4px solid var(--tinta);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.4);
+  padding: 1.5rem 1.3rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.novedad:nth-child(2) { transform: rotate(1deg); }
+.novedad:nth-child(3) { transform: rotate(-1deg); }
+.novedad:nth-child(4) { transform: rotate(0.6deg); }
+
+.novedad:hover {
+  transform: translateY(-6px) rotate(0deg);
+  box-shadow: 6px 12px 0 rgba(0, 0, 0, 0.4);
+}
+
+.novedad-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  font-size: 1.6rem;
+  background-color: var(--amarillo-lapiz);
+  border: 3px solid var(--tinta);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
+  margin-bottom: 1rem;
+}
+
+.novedad h3 {
+  font-family: var(--fuente-pixel);
+  font-size: 0.85rem;
+  font-weight: normal;
+  line-height: 1.6;
+  color: var(--rojo-oscuro);
+  margin: 0 0 0.75rem;
+}
+
+.novedad p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.novedad kbd,
+.tarjeta-atajos kbd {
+  font-family: var(--fuente-chica);
+  font-size: 0.7em;
+  background-color: var(--pizarra-oscuro);
+  color: var(--tiza);
+  border-radius: 3px;
+  padding: 0.15em 0.4em;
+}
+
+/* ---------- Llamado final a jugar ---------- */
+.seccion-jugar {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.8fr);
+  gap: 2rem;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.tarjeta-listo,
+.tarjeta-atajos {
+  border: 4px solid var(--tinta);
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.4);
+  padding: 2rem;
+}
+
+.tarjeta-listo {
+  background-color: var(--pizarra);
+}
+
+.tarjeta-listo h2 {
+  font-family: var(--fuente-pixel);
+  font-size: clamp(1.1rem, 3vw, 1.7rem);
+  font-weight: normal;
+  line-height: 1.5;
+  color: var(--amarillo-lapiz);
+  text-shadow: 3px 3px 0 var(--pizarra-oscuro);
+  margin: 1rem 0;
+}
+
+.tarjeta-listo p {
+  color: var(--papel);
+  margin: 0 0 1.75rem;
+  max-width: 55ch;
+}
+
+.tarjeta-listo strong {
+  color: var(--amarillo-lapiz);
+}
+
+.tarjeta-atajos {
+  background-color: var(--papel);
+}
+
+.tarjeta-atajos h3 {
+  font-family: var(--fuente-pixel);
+  font-size: 0.8rem;
+  font-weight: normal;
+  color: var(--verde-hoja);
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid var(--amarillo-lapiz);
+}
+
+.tarjeta-atajos p {
+  margin: 0 0 0.6rem;
+  font-size: 0.95rem;
+}
+
+.tarjeta-atajos a {
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: var(--fuente-chica);
+  font-size: 0.62rem;
+  color: var(--rojo-oscuro);
+  border-bottom: 2px solid var(--rojo-oscuro);
+  padding-bottom: 0.25rem;
+}
+
+.tarjeta-atajos a:hover,
+.tarjeta-atajos a:focus-visible {
+  color: var(--pizarra-oscuro);
+  border-color: var(--pizarra-oscuro);
+}
+
+/* ---------- Responsivo del inicio ---------- */
+@media (max-width: 900px) {
+  .hero-inicio,
+  .seccion-jugar {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-arte {
+    order: -1;
+  }
+
+  .hero-marco {
+    transform: rotate(1deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .pagina-inicio main.inicio {
+    padding: 2rem 1.25rem 6rem;
+  }
+
+  .encabezado .marca span {
+    font-size: 0.7rem;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(1.6rem, 8vw, 2.4rem);
+  }
+
+  .hero-lead {
+    font-size: 0.98rem;
+  }
+
+  .hero-flotante {
+    font-size: 0.5rem;
+    padding: 0.45rem 0.5rem;
+  }
+
+  .hero-flotante-mate { left: 0; }
+  .hero-flotante-martillo { right: 0; }
+
+  .hero-marco img {
+    height: 240px;
+  }
+
+  .tarjeta-listo,
+  .tarjeta-atajos {
+    padding: 1.5rem;
   }
 }

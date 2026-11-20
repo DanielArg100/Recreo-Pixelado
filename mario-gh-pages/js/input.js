@@ -59,6 +59,12 @@
         isDown: function(key) {
             return pressedKeys[key.toUpperCase()];
         },
+        consumeKey: function(key) {
+            var name = key.toUpperCase();
+            if (!pressedKeys[name]) return false;
+            pressedKeys[name] = false;
+            return true;
+        },
         consumeAttack: function() {
           if (!pressedKeys.ATTACK) return false;
           pressedKeys.ATTACK = false;

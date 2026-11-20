@@ -30,7 +30,13 @@
 	}
 
 	Block.prototype.hammerBreak = function() {
-		if (this.breakable) this.break();
+		if (!this.breakable) return;
+		var dropPos = this.pos.slice();
+		this.break();
+		// Solo el martillo puede hacer aparecer material para el mate.
+		if (Mario.rollMateDrop && Mario.dropMate && Mario.rollMateDrop()) {
+			Mario.dropMate(dropPos);
+		}
 	}
 
 	Block.prototype.bonk = function(power) {

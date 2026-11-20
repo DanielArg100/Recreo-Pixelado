@@ -2,17 +2,18 @@
 <html lang="es">
   <head>
     <meta charset="utf-8">
-    <meta name="description" content="Recreo Pixelado: controlás a Bruno, un payaso triste, en un nivel de plataformas ambientado en una escuela. Inspirado en Super Mario Bros. original.">
+    <meta name="description" content="Recreo Pixelado: martillos, mates y 13 efectos aleatorios en un plataformas escolar ambientado en la E.E.S.T N°1 Cecilia Berdichevsky. Inspirado en Super Mario Bros. original.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Recreo Pixelado | Videojuego</title>
     <link rel="shortcut icon" href="../SitioWeb/src/bruno-logo.png">
-    <link rel="stylesheet" href="css/game.css?v=4">
+    <link rel="stylesheet" href="css/game.css?v=9">
   </head>
   <body>
 	    <header class="school-header">
 	      <a class="brand" href="../index.html" aria-label="Volver al inicio"><span class="brand-mark">RP</span><span>RECREO PIXELADO</span></a>
 	      <nav class="shell-nav" aria-label="Navegación del proyecto">
 	        <a href="../index.html">INICIO</a>
+	        <a href="../SitioWeb/Pages/historia.html">HISTORIA</a>
 	        <a href="../SitioWeb/Pages/controles.html">CONTROLES</a>
 	        <a href="../SitioWeb/Pages/sobreProyecto.html">PROYECTO</a>
 	      </nav>
@@ -22,9 +23,9 @@
     <main class="game-page">
 	      <section class="hero-copy" aria-labelledby="game-title">
 	        <div class="hero-stamp">PROYECTO 01 <span>●</span> JUGABLE</div>
-	        <p class="eyebrow">EXPOTÉCNICA · AVENTURA ESCOLAR</p>
+	        <p class="eyebrow">E.E.S.T N°1 “CECILIA BERDICHEVSKY” · AVENTURA ESCOLAR</p>
 	        <h1 id="game-title">RECREO <span>PIXELADO</span></h1>
-	        <p class="intro">Controlás a Bruno, un payaso triste, en un nivel ambientado en una escuela. Inspirado en Super Mario Bros. original.</p>
+	        <p class="intro">Controlás a Bruno, un payaso triste, en un plataformas escolar con martillo, mate y 13 efectos aleatorios. Todo transcurre en la E.E.S.T N°1 “Cecilia Berdichevsky”. Inspirado en Super Mario Bros. original.</p>
 	      </section>
 
       <section class="game-card" aria-label="Pantalla del videojuego">
@@ -33,6 +34,18 @@
         <div class="decor decor-pencil" aria-hidden="true">🎈</div>
 	        <div class="screen-label"><span><span class="lamp"></span> AULA 1-1</span><span class="screen-code">PLATAFORMAS / 01</span><span class="live-dot">● EN JUEGO</span></div>
         <div id="game-screen" class="game-screen">
+          <div id="mate-fx" class="mate-fx" aria-hidden="true">
+            <span class="fx-star fx-1">★</span>
+            <span class="fx-star fx-2">✦</span>
+            <span class="fx-star fx-3">★</span>
+            <span class="fx-star fx-4">✧</span>
+            <span class="fx-star fx-5">★</span>
+            <span class="fx-star fx-6">✦</span>
+            <span class="fx-symbol fx-7">?</span>
+            <span class="fx-symbol fx-8">!</span>
+            <span class="fx-symbol fx-9">★</span>
+            <span class="fx-symbol fx-10">✦</span>
+          </div>
           <div id="game-hud" class="game-hud" aria-live="polite">
             <div id="hud-student" class="hud-student mood-calm">
               <span class="hud-tape" aria-hidden="true"></span>
@@ -64,7 +77,28 @@
                 <span id="hammer-cooldown" class="cooldown-ring"></span>
                 <span id="hammer-status">LISTO</span>
               </div>
+              <div id="mate-panel" class="mate-panel hud-card">
+                <span class="mate-icon">🧉</span>
+                <span class="hud-title">MATE</span>
+                <span id="mate-slots" class="mate-slots"></span>
+                <span id="mate-hint" class="mate-hint">0/2 MATES</span>
+                <span id="mate-brew" class="mate-brew"><span id="mate-brew-fill" class="mate-brew-fill"></span></span>
+              </div>
+              <div id="mate-effect" class="mate-effect hud-card" role="status" aria-live="polite" hidden>
+                <span class="hud-title">EFECTO ACTIVO</span>
+              </div>
             </div>
+          </div>
+          <div id="mate-ready" class="mate-ready" role="status" aria-live="polite">
+            <span class="mate-ready-burst" aria-hidden="true"></span>
+            <span class="mate-ready-steam mate-ready-steam-1" aria-hidden="true"></span>
+            <span class="mate-ready-steam mate-ready-steam-2" aria-hidden="true"></span>
+            <span class="mate-ready-steam mate-ready-steam-3" aria-hidden="true"></span>
+            <span class="mate-ready-cup" aria-hidden="true">🧉</span>
+            <span class="mate-ready-copy">
+              <span class="mate-ready-kicker">MATE LISTO</span>
+              <span id="mate-ready-effect" class="mate-ready-effect">¡EFECTO!</span>
+            </span>
           </div>
           <div id="hud-toast" class="hud-toast" role="status" aria-live="polite"></div>
           <div id="game-overlay" class="game-overlay" hidden>
@@ -76,26 +110,27 @@
             </div>
           </div>
         </div>
-	        <div class="hud-note"><span>WASD</span> MOVER <i></i> <span>W</span> SALTAR <i></i> <span>E / CLICK</span> MARTILLO</div>
+	        <div class="hud-note"><span>WASD</span> MOVER <i></i> <span>W</span> SALTAR <i></i> <span>E / CLICK</span> MARTILLO <i></i> <span>M</span> MATE</div>
 	        <div class="game-meta" aria-label="Estado del recorrido">
 	          <div><small>SECTOR</small><strong>EXTERIOR → PASILLOS</strong></div>
 	          <div><small>OBJETIVO</small><strong>CHECKPOINT Y BANDERA</strong></div>
 	          <div><small>FORMATO</small><strong>2 ETAPAS · 3 INTENTOS</strong></div>
+	          <div><small>MATETERA</small><strong>HASTA 2 · 13 EFECTOS</strong></div>
 	        </div>
 	      </section>
 
 	      <section class="school-notes" aria-label="Información del juego">
-	        <article class="note-mission"><span class="note-index">01</span><strong>MISIÓN</strong><p>Recorré las dos mitades del colegio: patio, pasillos, saltos y torretas goblin hasta la bandera.</p></article>
-	        <article class="note-items"><span class="note-index">02</span><strong>RECURSOS</strong><p>Cada 15 enemigos derrotados sumás un intento. El cartel de ESCUELA es tu checkpoint.</p></article>
-	        <article class="note-tip"><span class="note-index">03</span><strong>CONSEJO</strong><p>Los goblins ya no caminan: están en lo alto. Subí por las escaleras y usá el martillo.</p></article>
+	        <article class="note-mission"><span class="note-index">01</span><strong>MISIÓN</strong><p>Recorré la E.E.S.T N°1 “Cecilia Berdichevsky”: patio, pasillos, saltos y torretas goblin hasta la bandera.</p></article>
+	        <article class="note-items"><span class="note-index">02</span><strong>RECURSOS</strong><p>Cada 15 KO sumás un intento. Enemigos y bloques rotos sueltan mate (25%); guardá 2 y cebá con <b>M</b>. El cartel de ESCUELA es tu checkpoint.</p></article>
+	        <article class="note-tip"><span class="note-index">03</span><strong>CONSEJO</strong><p>El martillo pega igual a ambos lados (24 px, +12 con el mate). Mirá el HUD: cada efecto muestra cuánto falta. Si ves estrellas, es el mate haciendo de las suyas.</p></article>
 	      </section>
     </main>
 
-	    <footer class="school-footer"><div><span class="footer-label">RECREO PIXELADO</span><span>Proyecto escolar · Expotécnica 6°3</span></div><a href="../index.html">VOLVER AL SITIO PRINCIPAL <b>↗</b></a></footer>
+	    <footer class="school-footer"><div><span class="footer-label">RECREO PIXELADO</span><span>Expotécnica 6°3 · E.E.S.T N°1 “Cecilia Berdichevsky”</span></div><a href="../index.html">VOLVER AL SITIO PRINCIPAL <b>↗</b></a></footer>
 
     <script src="js/util.js"></script>
     <script src="js/input.js"></script>
-    <script src="js/resources.js"></script>
+    <script src="js/resources.js?v=2"></script>
     <script src="js/sprite.js?v=5"></script>
     <script src="js/entity.js"></script>
     <script src="js/pipe.js"></script>
@@ -105,18 +140,20 @@
 	<script src="js/fireball.js"></script>
     <script src="js/coin.js"></script>
     <script src="js/bcoin.js"></script>
-	<script src="js/goomba.js"></script>
-    <script src="js/koopa.js"></script>
-    <script src="js/goblin.js?v=8"></script>
+    <script src="js/goofy.js"></script>
+	<script src="js/goomba.js?v=2"></script>
+    <script src="js/koopa.js?v=2"></script>
+    <script src="js/goblin.js?v=9"></script>
     <script src="js/floor.js"></script>
-    <script src="js/block.js"></script>
+    <script src="js/block.js?v=2"></script>
     <script src="js/rubble.js"></script>
     <script src="js/prop.js"></script>
-    <script src="js/player.js?v=4"></script>
+    <script src="js/player.js?v=8"></script>
     <script src="js/flag.js?v=2"></script>
     <script src="js/levels/level.js?v=5"></script>
-    <script src="js/levels/11.js?v=6"></script>
+    <script src="js/mate.js?v=7"></script>
+    <script src="js/levels/11.js?v=11"></script>
     <script src="js/levels/11tunnel.js?v=5"></script>
-    <script src="js/game.js?v=8"></script>
+    <script src="js/game.js?v=18"></script>
   </body>
 </html>

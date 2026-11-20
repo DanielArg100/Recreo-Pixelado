@@ -28,7 +28,10 @@ var runState = Mario.runState = {
   cleared: false,
   over: false,
   hurtFlash: 0,
-  reaction: null
+  reaction: null,
+  // Bonos permanentes del mate: sobreviven a las muertes del recorrido.
+  mateMaxHealth: 0,
+  mateHammerRange: 0
 };
 var MOODS = {
   calm:   { src: 'src/hud/head_calm.png?v=1',   label: 'TRANQUILO' },
@@ -44,7 +47,7 @@ var lastHudProgress = -1;
 var toastTimeout = null;
 
 var schoolBackgrounds = {
-  first: 'src/fondos/Fondo1.png',
+  first: 'src/fondos/FondoNuevoExterior.png',
   second: 'src/fondos/FondoNuevo.webp'
 };
 var cachedSchoolBackgrounds = { first: null, second: null };
@@ -79,9 +82,54 @@ resources.load([
   'src/hojaDeSprites/clown-animations.png',
   'src/tiles/frames/exterior/exterior_53.png',
   'src/tiles/frames/exterior/exterior_14.png',
+  'src/tiles/frames/exterior/Arbol_1.png',
+  'src/tiles/frames/exterior/Arbol_2.png',
+  'src/tiles/frames/exterior/Arbol_3.png',
+  'src/tiles/frames/exterior/Arbol_4.png',
+  'src/tiles/frames/exterior/Arbol_5.png',
+  'src/tiles/frames/exterior/ArbustoConFlores.png',
+  'src/tiles/frames/exterior/ArbustoRectanguloLargo.png',
+  'src/tiles/frames/exterior/BancaDeMaderaConMesa.png',
+  'src/tiles/frames/exterior/Banco.png',
+  'src/tiles/frames/exterior/Columpio.png',
+  'src/tiles/frames/exterior/Tobogan.png',
+  'src/tiles/frames/exterior/Arco.png',
+  'src/tiles/frames/exterior/AroBasketball.png',
+  'src/tiles/frames/exterior/Farol.png',
+  'src/tiles/frames/exterior/FloresEnMaceta.png',
+  'src/tiles/frames/exterior/FloresEnMaceta_2.png',
+  'src/tiles/frames/exterior/TachoDeBasura.png',
+  'src/tiles/frames/exterior/TachoDeBasuraEcologico.png',
+  'src/tiles/frames/exterior/Piedra.png',
+  'src/tiles/frames/exterior/Cono.png',
+  'src/BloquesSuelo/Pasto.png',
+  'src/tiles/frames/escolar/Bloque1.png',
+  'src/tiles/frames/escolar/Casilleros.png',
+  'src/tiles/frames/escolar/Puerta.png',
+  'src/tiles/frames/escolar/PuertasDoble.png',
+  'src/tiles/frames/escolar/Ventana.png',
+  'src/tiles/frames/escolar/Ventana2.png',
+  'src/tiles/frames/escolar/Ventana3.png',
+  'src/tiles/frames/escolar/Reloj.png',
+  'src/tiles/frames/escolar/TablonDeApuntes.png',
+  'src/tiles/frames/escolar/CartelIndicandoAulas.png',
+  'src/tiles/frames/escolar/CartelFondo.png',
+  'src/tiles/frames/escolar/Pizarra.png',
+  'src/tiles/frames/escolar/EstanteDeLibros.png',
+  'src/tiles/frames/escolar/Pupitre.png',
+  'src/tiles/frames/escolar/Silla.png',
+  'src/tiles/frames/escolar/PlantaEnMaceta.png',
+  'src/tiles/frames/escolar/Lavamanos.png',
+  'src/tiles/frames/escolar/Extintor.png',
+  'src/tiles/frames/escolar/Estandarte.png',
+  'src/tiles/frames/escolar/TachoDeBasura.png',
+  'src/tiles/frames/escolar/ParedDeFondo_1.png',
+  'src/tiles/frames/escolar/ParedDeFondo_2.png',
+  'src/tiles/frames/escolar/ParedDeFondo_3.png',
+  'src/tiles/frames/escolar/ParedDeFondo_5.png',
   schoolBackgrounds.first,
   schoolBackgrounds.second
-]);
+].concat(Mario.MATE_FRAMES));
 
 resources.onReady(init);
 var level;
@@ -140,6 +188,9 @@ function update(dt) {
     updateGameHud(dt);
     return;
   }
+
+  if (input.consumeKey('M')) Mario.MateSystem.startBrew();
+  Mario.MateSystem.update(dt);
 
   handleInput(dt);
   updateEntities(dt, gameTime);
@@ -210,6 +261,7 @@ function updateGameHud(dt) {
 		lastHudProgress = runState.killsSinceExtra;
 	}
 
+	updateMateHud();
 	setMood(resolveMood());
 }
 
@@ -318,6 +370,10 @@ Mario.registerKill = function(enemy) {
 			sounds.powerup.play();
 		}
 	}
+	// Probabilidad media-baja de que un enemigo suelte material para el mate.
+	if (enemy.pos && Mario.dropMate && Mario.rollMateDrop()) {
+		Mario.dropMate(enemy.pos);
+	}
 };
 
 Mario.onCheckpoint = function(x, y) {
@@ -347,15 +403,185 @@ Mario.onGoblinHit = function() {
 	react('win', '¡BUEN MARTILLAZO!', 1.2);
 };
 
+Mario.onGoblinDefeated = function() {
+	react('win', '¡TORRETA FUERA!', 1.8);
+};
+
 Mario.onPickup = function(kind) {
 	if (kind === 'star') react('win', '¡ESTRELLA!', 2);
 	else if (kind === 'fireflower') react('win', '¡VIDA EXTRA!', 1.7);
 	else react('win', '¡VIDA RECUPERADA!', 1.5);
 };
 
+// ---------------------------------------------------------------------------
+// HUD del mate: inventario de 2, barra de cebado y aviso de mate listo.
+// ---------------------------------------------------------------------------
+var lastMateSignature = '';
+var mateReadyTimeout = null;
+var mateCelebrateTimeout = null;
+var lastMateEffectsSignature = '';
+var mateEffectRows = [];
+
+function clearMateEffectRows() {
+	mateEffectRows.forEach(function(ui) {
+		if (ui.row.parentNode) ui.row.parentNode.removeChild(ui.row);
+	});
+	mateEffectRows = [];
+}
+
+// Muestra cuánto le falta a cada buff/debuff temporal para terminar.
+function updateMateEffectHud() {
+	var panel = document.getElementById('mate-effect');
+	if (!panel) return;
+	var active = Mario.MateSystem.active || {};
+	var list = [];
+	for (var slot in active) {
+		if (active.hasOwnProperty(slot)) list.push(active[slot]);
+	}
+	list.sort(function(a, b) { return a.remaining - b.remaining; });
+
+	if (!list.length) {
+		panel.hidden = true;
+		lastMateEffectsSignature = '';
+		clearMateEffectRows();
+		return;
+	}
+	panel.hidden = false;
+
+	var signature = list.map(function(e) { return e.id; }).join(',');
+	if (signature !== lastMateEffectsSignature) {
+		lastMateEffectsSignature = signature;
+		clearMateEffectRows();
+		mateEffectRows = list.map(function(e) {
+			var row = document.createElement('span');
+			row.className = 'mate-effect-row';
+
+			var label = document.createElement('span');
+			label.className = 'mate-effect-label';
+			label.textContent = e.label;
+
+			var bar = document.createElement('span');
+			bar.className = 'mate-effect-bar';
+			var fill = document.createElement('span');
+			fill.className = 'mate-effect-fill';
+			bar.appendChild(fill);
+
+			var time = document.createElement('span');
+			time.className = 'mate-effect-time';
+
+			row.appendChild(label);
+			row.appendChild(bar);
+			row.appendChild(time);
+			panel.appendChild(row);
+			return { row: row, fill: fill, time: time };
+		});
+	}
+
+	list.forEach(function(e, i) {
+		var ui = mateEffectRows[i];
+		if (!ui) return;
+		var pct = Math.max(0, Math.min(100, e.remaining / e.duration * 100));
+		ui.fill.style.width = pct + '%';
+		ui.time.textContent = e.remaining.toFixed(1) + 's';
+		ui.row.setAttribute('data-kind', e.kind);
+		ui.row.setAttribute('aria-label', e.label + ' · ' + e.remaining.toFixed(1) + ' segundos restantes');
+	});
+}
+
+window.updateMateHud = function() {
+	var system = Mario.MateSystem;
+	var slots = document.getElementById('mate-slots');
+	var hint = document.getElementById('mate-hint');
+	var brew = document.getElementById('mate-brew');
+	var fill = document.getElementById('mate-brew-fill');
+	var panel = document.getElementById('mate-panel');
+
+	if (slots) {
+		var signature = system.inventory.map(function(entry) { return entry.frameIndex; }).join(',');
+		if (signature !== lastMateSignature) {
+			lastMateSignature = signature;
+			slots.innerHTML = '';
+			for (var i = 0; i < 2; i++) {
+				var slot = document.createElement('span');
+				slot.className = 'mate-slot' + (i < system.inventory.length ? ' filled' : '');
+				var entry = system.inventory[i];
+				if (entry) {
+					var img = document.createElement('img');
+					img.src = Mario.MATE_FRAMES[entry.frameIndex];
+					img.alt = 'Mate guardado';
+					slot.appendChild(img);
+				} else {
+					slot.textContent = '·';
+				}
+				slots.appendChild(slot);
+			}
+		}
+	}
+	if (hint) {
+		hint.textContent = system.inventory.length >= 2
+			? 'M · CEBAR MATE'
+			: system.inventory.length + '/2 MATES';
+	}
+	if (brew && fill) {
+		brew.classList.toggle('active', system.brewing);
+		var pct = system.brewing ? Math.min(100, system.brewProgress / system.brewDuration * 100) : 0;
+		fill.style.width = pct + '%';
+	}
+	if (panel) panel.classList.toggle('brewing', system.brewing);
+	updateMateEffectHud();
+};
+
+Mario.onMateCollect = function(replaced) {
+	showToast('MATERIAL PARA EL MATE OBTENIDO', 'checkpoint');
+	react('win', replaced ? '¡MATERIAL NUEVO!' : '¡MATERIAL OBTENIDO!', 1.2);
+};
+
+Mario.onMateBrewStart = function() {
+	react('calm', 'CEBANDO MATE…', 2.2);
+};
+
+Mario.onMateReady = function(effect) {
+	var ready = document.getElementById('mate-ready');
+	var effectLabel = effect ? effect.label : '¡MATE!';
+	var screen = document.getElementById('game-screen');
+	if (mateReadyTimeout) clearTimeout(mateReadyTimeout);
+	if (mateCelebrateTimeout) clearTimeout(mateCelebrateTimeout);
+
+	if (ready) {
+		var label = document.getElementById('mate-ready-effect');
+		if (label) label.textContent = effectLabel;
+		ready.setAttribute('aria-label', 'LISTO · ' + effectLabel);
+		ready.setAttribute('data-kind', effect ? effect.kind : 'extra');
+		// Reinicia las animaciones aunque el mate anterior todavía esté visible.
+		ready.classList.remove('show');
+		void ready.offsetWidth;
+		ready.classList.add('show');
+		mateReadyTimeout = setTimeout(function() { ready.classList.remove('show'); }, 2800);
+	}
+	if (screen) {
+		screen.classList.remove('mate-celebrate');
+		void screen.offsetWidth;
+		screen.classList.add('mate-celebrate');
+		mateCelebrateTimeout = setTimeout(function() { screen.classList.remove('mate-celebrate'); }, 1200);
+	}
+
+	if (effect) showToast(effect.label, effect.kind);
+	if (effect && effect.kind === 'hurt') react('hurt', effect.label, 2);
+	else if (effect) react('win', effect.label, 2);
+};
+
 function attemptNotice(n) {
 	return n === 1 ? 'QUEDA 1 INTENTO' : 'QUEDAN ' + n + ' INTENTOS';
 }
+
+// Reaplica los bonus permanentes del mate cada vez que nace un Bruno nuevo.
+function applyMateBonuses() {
+	if (!player) return;
+	player.maxHealth = Math.max(1, 3 + (runState.mateMaxHealth || 0));
+	player.health = player.maxHealth;
+	player.hammerRange = runState.mateHammerRange || 0;
+}
+Mario.applyMateBonuses = applyMateBonuses;
 
 // Muerte del jugador: descuenta un intento y reaparece en el checkpoint.
 Mario.onPlayerDeath = function() {
@@ -374,6 +600,7 @@ Mario.onPlayerDeath = function() {
 
 	var checkpoint = runState.checkpoint;
 	player = new Mario.Player(level.playerPos);
+	applyMateBonuses();
 	Mario.oneone.call();
 	input.reset();
 	if (checkpoint) {
@@ -395,10 +622,14 @@ Mario.onLevelRestart = function() {
 	runState.over = false;
 	runState.hurtFlash = 0;
 	runState.reaction = null;
+	runState.mateMaxHealth = 0;
+	runState.mateHammerRange = 0;
 	hudMood = '';
+	Mario.MateSystem.reset();
 	player.maxHealth = 3;
 	player.health = 3;
 	player.coins = 0;
+	applyMateBonuses();
 	lastHudHealth = player.health;
 	lastHudAttempts = -1;
 	lastHudProgress = -1;
@@ -416,11 +647,15 @@ Mario.restartRun = function() {
 	runState.over = false;
 	runState.hurtFlash = 0;
 	runState.reaction = null;
+	runState.mateMaxHealth = 0;
+	runState.mateHammerRange = 0;
 	hudMood = '';
+	Mario.MateSystem.reset();
 	lastHudAttempts = -1;
 	lastHudProgress = -1;
 	hideGameOver();
 	player = new Mario.Player(level.playerPos);
+	applyMateBonuses();
 	Mario.oneone.call();
 	vX = 0;
 	input.reset();
@@ -430,6 +665,24 @@ Mario.restartRun = function() {
 
 function handleInput(dt) {
   if (runState.over || player.piping || player.dying || player.noInput) return; //don't accept input
+  // Cebando mate: Bruno se queda quieto hasta que termina la barra.
+  if (Mario.MateSystem.locksPlayer) {
+    player.noWalk();
+    player.noJump();
+    return;
+  }
+
+  var leftDown = input.isDown('LEFT');
+  var rightDown = input.isDown('RIGHT');
+  if (Mario.MateSystem.inverted > 0) {
+    var tmp = leftDown;
+    leftDown = rightDown;
+    rightDown = tmp;
+  }
+  // La dirección se aplica antes del golpe para que A + E en el mismo frame
+  // golpee hacia la izquierda (y respete controles invertidos).
+  if (leftDown) player.left = true;
+  else if (rightDown) player.left = false;
 
 	if (input.consumeAttack()) player.meleeAttack();
   if (input.isDown('JUMP')) {
@@ -445,10 +698,10 @@ function handleInput(dt) {
     player.noCrouch();
   }
 
-  if (input.isDown('LEFT')) { // 'd' or left arrow
+  if (leftDown) { // 'a' or left arrow
     player.moveLeft();
   }
-  else if (input.isDown('RIGHT')) { // 'k' or right arrow
+  else if (rightDown) { // 'd' or right arrow
     player.moveRight();
   } else {
     player.noWalk();
@@ -527,8 +780,12 @@ function render() {
   renderSchoolBackground();
 
   //scenery gets drawn first to get layering right.
+  // Se escanea un poco hacia la izquierda para que los props anchos no
+  // desaparezcan en la borde de la pantalla.
+  var sceneryColStart = Math.floor(vX / 16) - 8;
+  var sceneryColEnd = Math.ceil((vX + vWidth) / 16) + 1;
   for(var i = 0; i < 15; i++) {
-    for (var j = Math.floor(vX / 16) - 1; j < Math.floor(vX / 16) + 20; j++){
+    for (var j = sceneryColStart; j < sceneryColEnd; j++){
       if (level.scenery[i][j]) {
         renderEntity(level.scenery[i][j]);
       }
@@ -551,8 +808,10 @@ function render() {
 		  });
 
   //then we draw every static object.
+  var staticColStart = Math.floor(vX / 16) - 1;
+  var staticColEnd = Math.ceil((vX + vWidth) / 16) + 1;
   for(var i = 0; i < 15; i++) {
-    for (var j = Math.floor(vX / 16) - 1; j < Math.floor(vX / 16) + 20; j++){
+    for (var j = staticColStart; j < staticColEnd; j++){
       if (level.statics[i][j]) {
         renderEntity(level.statics[i][j]);
       }

@@ -47,6 +47,10 @@
 		this.targetPos = [];
 		this.maxSpeed = 1.5;
 		this.moveAcc = 0.07;
+		// Modificadores del mate (temporales los dos primeros).
+		this.jumpBoost = false;
+		this.speedBoost = 1;
+		this.hammerRange = 0;
 
 		Mario.Entity.call(this, {
 			pos: pos,
@@ -74,21 +78,44 @@
 		this.health = Math.min(this.maxHealth, this.health + amount);
 	}
 
+	// Hitbox del martillo, simétrica para ambos lados y con el alcance del mate.
+	Player.prototype.hammerHitbox = function() {
+		var reach = 24 + (this.hammerRange || 0);
+		var x1 = this.left ? this.pos[0] - reach : this.pos[0];
+		var y1 = this.pos[1] - 8;
+		return { x1: x1, x2: x1 + reach, y1: y1, y2: y1 + 24 };
+	};
+
+	Player.prototype.hitEnemiesWithHammer = function(hit) {
+		level.enemies.forEach(function(enemy) {
+			if (hit.x1 < enemy.pos[0] + enemy.hitbox[2] && hit.x2 > enemy.pos[0] &&
+				hit.y1 < enemy.pos[1] + enemy.hitbox[3] && hit.y2 > enemy.pos[1]) {
+				enemy.bump();
+			}
+		});
+	};
+
+	Player.prototype.hitBlocksWithHammer = function(hit) {
+		var colStart = Math.max(0, Math.floor(hit.x1 / 16));
+		var colEnd = Math.floor(hit.x2 / 16);
+		var rowStart = Math.max(0, Math.floor(hit.y1 / 16));
+		var rowEnd = Math.floor(hit.y2 / 16);
+		for (var row = rowStart; row <= rowEnd; row++) {
+			if (!level.blocks[row]) continue;
+			for (var col = colStart; col <= colEnd; col++) {
+				var block = level.blocks[row][col];
+				if (block && block.breakable) block.hammerBreak();
+			}
+		}
+	};
+
 	Player.prototype.hitWithHammer = function() {
 		if (this.attackHit) return;
-		var attackX = this.left ? this.pos[0] - 16 : this.pos[0] + 16;
-		var attackY = this.pos[1] - 8;
-		var self = this;
-		level.enemies.forEach(function(enemy) {
-			if (attackX < enemy.pos[0] + enemy.hitbox[2] && attackX + 16 > enemy.pos[0] &&
-				attackY < enemy.pos[1] + enemy.hitbox[3] && attackY + 24 > enemy.pos[1]) enemy.bump();
-		});
-		var col = Math.floor(attackX / 16);
-		for (var row = Math.floor(attackY / 16); row <= Math.floor((attackY + 24) / 16); row++) {
-			if (level.blocks[row] && level.blocks[row][col] && level.blocks[row][col].breakable) level.blocks[row][col].hammerBreak();
-		}
+		var hit = this.hammerHitbox();
+		this.hitEnemiesWithHammer(hit);
+		this.hitBlocksWithHammer(hit);
 		this.attackHit = true;
-	}
+	};
 
 	Player.prototype.moveRight = function() {
 		this.maxSpeed = 1.5;
@@ -155,7 +182,7 @@
 			this.jumping = 20;
 			this.canJump = false;
 			this.standing = false;
-			this.vel[1] = -6;
+			this.vel[1] = this.jumpBoost ? -7.4 : -6;
 			if (this.power === 0) {
 				sounds.smallJump.currentTime = 0;
 				sounds.smallJump.play();
@@ -241,7 +268,8 @@
 			this.vel[0] = Math.max(this.vel[0], 0);
 		}
 
-		if (Math.abs(this.vel[0]) > this.maxSpeed) {
+		var currentMaxSpeed = this.maxSpeed * (this.speedBoost || 1);
+		if (Math.abs(this.vel[0]) > currentMaxSpeed) {
 			this.vel[0] -= 0.05 *  this.vel[0] / Math.abs(this.vel[0]);
 			this.acc[0] = 0;
 		}
@@ -319,14 +347,7 @@
 		Player.prototype.checkCollisions = function() {
 			if (this.piping || this.dying) return;
 			if (this.shooting > 0 && !this.meleeHit) {
-				var attackX = this.left ? this.pos[0] - 16 : this.pos[0] + 16;
-				var attackY = this.pos[1] - 8;
-				level.enemies.forEach(function(enemy) {
-					if (attackX < enemy.pos[0] + enemy.hitbox[2] && attackX + 16 > enemy.pos[0] &&
-						attackY < enemy.pos[1] + enemy.hitbox[3] && attackY + 24 > enemy.pos[1]) {
-						enemy.bump();
-					}
-				});
+				this.hitEnemiesWithHammer(this.hammerHitbox());
 				this.meleeHit = true;
 			}
 			//x-axis first!

@@ -15,10 +15,84 @@
 		this.specialTimer = 1.5 + Math.random() * 2.5;
 		this.hopping = false;
 		this.idx = level.enemies.length;
+
+		// Ocurrencias goofy: se activan de vez en cuando y duran poco.
+		this.goofy = null;
+		this.goofyTimer = 1 + Math.random() * 2.5;
+		this.goofyTime = 0;
+		this.goofyDuration = 0;
+		this.goofyVel = 0;
+		this.goofySpin = 0;
+		this.bubble = '';
+		this.bubbleLift = 0;
   };
 
+  var GOOFY_ACTS = ['wiggle', 'nap', 'dash', 'spin', 'backstep'];
+
   Goomba.prototype.render = function(ctx, vX, vY) {
-    this.sprite.render(ctx, this.pos[0], this.pos[1], vX, vY);
+    Mario.Goofy.drawSprite(ctx, this.sprite, this, vX, vY, this.goofySpin);
+    Mario.Goofy.drawBubble(ctx, this, vX, vY);
+  };
+
+  Goomba.prototype.startGoofy = function() {
+    if (this.dying || this.flipping) return;
+    var act = Mario.Goofy.pick(GOOFY_ACTS);
+    this.goofy = act;
+    this.goofyTime = 0;
+    this.goofyDuration = act === 'nap' ? 1.3 + Math.random() * 0.8
+      : act === 'dash' ? 0.6 + Math.random() * 0.3
+      : 0.8 + Math.random() * 0.5;
+    this.goofyVel = this.vel[0];
+    if (act === 'nap') {
+      this.vel[0] = 0;
+      this.bubble = 'Zzz';
+    } else if (act === 'dash') {
+      this.vel[0] = (this.goofyVel < 0 ? -1 : 1) * 1.7;
+      this.bubble = '¡¡';
+    } else if (act === 'spin') {
+      this.vel[0] = this.goofyVel * 0.2;
+      this.bubble = '★';
+    } else if (act === 'backstep') {
+      this.vel[0] = -this.goofyVel * 0.9;
+      this.bubble = '¿?';
+    } else {
+      this.bubble = '~';
+    }
+  };
+
+  Goomba.prototype.updateGoofy = function(dt) {
+    if (this.dying || this.flipping) {
+      this.goofy = null;
+      this.goofySpin = 0;
+      this.bubble = '';
+      this.bubbleLift = 0;
+      return;
+    }
+    if (!this.goofy) {
+      this.goofyTimer -= dt;
+      if (this.goofyTimer <= 0) this.startGoofy();
+      return;
+    }
+
+    this.goofyTime += dt;
+    var p = Math.min(1, this.goofyTime / this.goofyDuration);
+    this.bubbleLift = Math.sin(p * Math.PI) * 3;
+    if (this.goofy === 'wiggle') {
+      var wave = Math.sin(p * Math.PI * 6);
+      this.vel[0] = this.goofyVel * (1 + wave * 0.9);
+      this.goofySpin = wave * 0.22;
+    } else if (this.goofy === 'spin') {
+      this.goofySpin = p * Math.PI * 4;
+    }
+
+    if (p >= 1) {
+      this.vel[0] = this.goofyVel;
+      this.goofy = null;
+      this.goofySpin = 0;
+      this.bubble = '';
+      this.bubbleLift = 0;
+      this.goofyTimer = 2 + Math.random() * 3.5;
+    }
   };
 
   Goomba.prototype.update = function(dt, vX) {
@@ -27,6 +101,8 @@
     } else if (this.pos[0] - vX < -32) {
       delete level.enemies[this.idx];
     }
+
+    this.updateGoofy(dt);
 
     if (this.dying) {
       this.dying -= 1;
@@ -49,6 +125,7 @@
 
   Goomba.prototype.collideWall = function() {
     this.vel[0] = -this.vel[0];
+    if (this.goofy) this.goofyVel = -this.goofyVel;
   };
 
   Goomba.prototype.checkCollisions = function() {
