@@ -4,19 +4,20 @@
 
 ## 📖 Sobre el proyecto
 
-**Recreo Pixelado** es un sitio web dedicado a un videojuego de plataformas propio: controlás a **Bruno, un payaso triste**, que recorre la escuela durante el recreo. Todo transcurre en la **E.E.S.T N°1 "Cecilia Berdichevsky"**: el patio, los pasillos y las aulas son el escenario del juego.
+**Recreo Pixelado** es un sitio web dedicado a un videojuego de plataformas propio: controlás a **Bruno, vestido de payaso**, que recorre la escuela durante el recreo. Todo transcurre en la **E.E.S.T N°1 "Cecilia Berdichevsky"**: el patio, los pasillos y las aulas son el escenario del juego.
 
-El sitio combina contenido informativo (inicio, historia, controles y sobre el proyecto) con una versión jugable directamente en el navegador. El juego se construyó a partir del proyecto **Full Screen Mario**, sobre el cual se hicieron modificaciones y adaptaciones propias, y toma como referencia el **Super Mario Bros. original** de Nintendo.
+El sitio combina contenido informativo (inicio, historia, controles y sobre el proyecto) con una versión jugable directamente en el navegador. El juego parte del proyecto **Full Screen Mario** y adapta esa base a una propuesta escolar propia, tomando como referencia el **Super Mario Bros. original** de Nintendo.
 
-Uno de los objetivos principales fue no limitarse a mostrar el juego original, sino crear una **experiencia propia** con un nivel personalizado de dos etapas y mecánicas nuevas.
+Uno de los objetivos principales fue no limitarse a mostrar el juego original, sino crear una **experiencia propia** con un nivel personalizado de dos etapas y mecánicas propias.
 
 ## 🎮 Características
 
-- 🌐 Sitio web completo: inicio rediseñado, historia, controles y proyecto.
+- 🌐 Sitio web completo: inicio, historia, controles y proyecto.
 - 🕹️ Juego jugable en el navegador, en **dos etapas**, con checkpoint y bandera.
+- 📱 **Modo Celular** con controles táctiles para moverte, saltar, agacharte, usar el martillo y cebar el mate; el **modo Netbook** mantiene los controles de teclado.
 - 🔨 **Martillo** con alcance base de 24 px, golpe simétrico a ambos lados y refuerzo temporal de +12 px.
 - 🧉 **Mate**: los enemigos y los bloques rotos con el martillo sueltan material con 25% de probabilidad; se guardan hasta 2 y se ceban con **M**.
-- 🎲 **13 efectos aleatorios** con HUD de cuenta regresiva: salto, vida, intentos, velocidad, martillo, mareo, alucinaciones y controles invertidos, entre otros.
+- 🎲 **15 efectos aleatorios** con HUD de cuenta regresiva: salto, vida, intentos, velocidad, martillo, invencibilidad, mareo, alucinaciones, controles invertidos y peso de carpeta, entre otros.
 - ★ **Estrellas y símbolos en pantalla** durante el mareo y las alucinaciones.
 - 🤡 **Enemigos goofy**: goombas y koopas con ocurrencias aleatorias y globos de texto.
 - 💻 Funcionamiento directo desde la web, sin instalar nada.
@@ -25,20 +26,25 @@ Uno de los objetivos principales fue no limitarse a mostrar el juego original, s
 
 Al vencer enemigos o romper bloques con el martillo aparece material para el mate (`Mario.MATE_DROP_CHANCE = 0.25`). El ítem queda quieto, aparece con una animación breve y se puede levantar recién después de 1 segundo. Aparece el aviso **"MATERIAL PARA EL MATE OBTENIDO"**.
 
-La matetera del HUD guarda **hasta 2** mates. Con **M** se ceba uno y se aplica uno de los **13 efectos** definidos en `Mario.MATE_EFFECTS`:
+La matetera del HUD guarda **hasta 2** mates. Con **M** se ceba uno y se aplica uno de los **15 efectos** definidos en `Mario.MATE_EFFECTS`:
 
-| Efecto | Tipo | Duración |
-|---|---|---|
-| ¡Saltarás más! | extra | 14 s |
-| ¡Te curaste! | premio | instantáneo |
-| ¡El mate te pegó! | castigo | instantáneo |
-| +1 vida máxima / -1 vida máxima | variable | permanente en la partida |
-| +1 intento / -1 intento | variable | instantáneo |
-| Más rápido / Más lento | variable | 14 s |
-| Martillo más largo | extra | permanente en la partida |
-| ¡Estás mareo! | castigo | 8 s |
-| ¡Alucinando! | extra | 10 s |
-| Controles invertidos | castigo | 12 s |
+| Efecto | Tipo | Duración | Qué hace |
+|---|---|---|---|
+| ¡Saltarás más! | extra | 14 s | Salto más alto (impulso −7,4). |
+| ¡Te curaste! | premio | instantáneo | Recupera 1 corazón. |
+| ¡El mate te pegó! | castigo | instantáneo | Pierde 1 corazón; ignora la invencibilidad. |
+| +1 vida máxima | extra | toda la partida | Suma 1 corazón al máximo y cura. |
+| −1 vida máxima | castigo | toda la partida | Resta 1 corazón al máximo (mínimo 1). |
+| +1 intento | extra | instantáneo | Suma 1 intento. |
+| −1 intento | castigo | instantáneo | Resta 1 intento (mínimo 0). |
+| ¡Más rápido! | extra | 14 s | Velocidad máxima ×1,35. |
+| ¡Más lento! | castigo | 14 s | Velocidad máxima ×0,6. |
+| ¡Martillo más largo! | extra | toda la partida | +12 px de alcance; se acumula. |
+| ¡Estás mareo! | castigo | 8 s | Estrellas, giro y mareo en pantalla. |
+| ¡Alucinando! | extra | 10 s | Colores y símbolos alucinantes. |
+| ¡Controles invertidos! | castigo | 12 s | Invierte izquierda y derecha. |
+| ¡Invencible! | extra | 6 s | No recibe daño; Bruno parpadea. |
+| ¡Peso de carpeta! | castigo | 12 s | Gravedad ×1,55: cae más rápido y salta más corto. |
 
 El panel **EFECTO ACTIVO** del HUD muestra cuánto falta para que terminen los efectos temporales.
 
@@ -57,7 +63,7 @@ Bruno corre automáticamente; no hay tecla de correr. **↑**, **Espacio** y **E
 
 ## 🧩 Nivel personalizado
 
-El nivel usa la estructura de Full Screen Mario pero modifica la distribución del escenario, plataformas, enemigos, obstáculos, tuberías, bloques, objetos y dificultad. Tiene dos etapas (exterior y pasillos), un cartel de ESCUELA como checkpoint, torretas goblin y la bandera de salida. Los goombas y koopas hacen ocurrencias graciosas (siesta, trompo, corrida, patinada, reverencia, mirada y paso atrás) sin alterar daño ni puntaje.
+El nivel usa la estructura de Full Screen Mario pero modifica la distribución del escenario, plataformas, enemigos, obstáculos, tuberías, bloques, objetos y dificultad. Tiene dos etapas (exterior y pasillos), un cartel de ESCUELA como checkpoint, torretas goblin y la bandera de salida. Los goombas y koopas hacen ocurrencias graciosas (siesta, trompo, corrida, patinada, reverencia, mirada, paso atrás, susto y saltitos) sin alterar daño ni puntaje. El susto es exclusivo de los goombas y los saltitos, de los koopas.
 
 ## 🛠️ Tecnologías utilizadas
 

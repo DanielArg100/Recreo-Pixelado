@@ -54,15 +54,9 @@ body {
   overflow-x: hidden;
   color: var(--tinta);
   font-family: var(--fuente-texto);
+  /* Fondo liso: las nubes de tiza tapaban parte del texto. */
   background-color: var(--pizarra);
-  /* Nubes dibujadas con tiza sobre el pizarrón */
-  background-image:
-    radial-gradient(circle at 32px 34px, rgba(253, 252, 247, 0.92) 12px, transparent 13px),
-    radial-gradient(circle at 58px 24px, rgba(253, 252, 247, 0.92) 16px, transparent 17px),
-    radial-gradient(circle at 84px 34px, rgba(253, 252, 247, 0.92) 12px, transparent 13px),
-    radial-gradient(46px 14px at 58px 40px, rgba(253, 252, 247, 0.92) 99%, transparent 100%);
-  background-size: 240px 90px;
-  background-repeat: repeat;
+  background-image: none;
 }
 
 /* Scanlines sutiles de CRT sobre toda la pantalla */
@@ -935,6 +929,133 @@ a { color: inherit; }
   letter-spacing: 0.04em;
 }
 
+/* ---------- Selector de modo: netbook o celular ---------- */
+.modo-selector {
+  width: min(940px, 100%);
+  margin: 0 auto 24px;
+  padding: 18px 20px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px 24px;
+  color: var(--tinta);
+  background: var(--papel);
+  border: 4px solid var(--tinta);
+  box-shadow: 7px 7px 0 var(--shadow);
+}
+
+.modo-cabecera { display: flex; flex-direction: column; gap: 6px; }
+.modo-kicker {
+  color: var(--rojo-oscuro);
+  font: 8px var(--fuente-pixel);
+  letter-spacing: 0.08em;
+}
+.modo-cabecera h2 {
+  margin: 0;
+  color: var(--tinta);
+  font-family: var(--fuente-smb);
+  font-size: clamp(18px, 2.4vw, 26px);
+  font-weight: normal;
+  line-height: 1.1;
+}
+.modo-botones { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.modo-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 9px 12px;
+  color: var(--tinta);
+  background: #fffaf0;
+  border: 3px solid var(--tinta);
+  box-shadow: 3px 3px 0 var(--tinta);
+  font: 9px var(--fuente-pixel);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+.modo-boton:hover,
+.modo-boton:focus-visible {
+  background: var(--amarillo-lapiz);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--tinta);
+}
+.modo-boton[aria-pressed="true"] {
+  background: var(--amarillo-lapiz);
+  box-shadow: inset 3px 3px 0 rgba(43, 43, 43, 0.18), 2px 2px 0 var(--tinta);
+  transform: translate(1px, 1px);
+}
+.modo-ayuda {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #4a4034;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ---------- Controles táctiles para el modo celular ---------- */
+.touch-controls {
+  position: relative;
+  z-index: 1;
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+  margin-top: 14px;
+  padding: 12px;
+  background: var(--pizarra-oscuro);
+  border: 3px solid var(--tiza);
+  box-shadow: 0 0 0 3px var(--pizarra-oscuro), 5px 5px 0 var(--shadow);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+body.modo-celular .touch-controls { display: grid; }
+body.modo-celular .hud-note { display: none; }
+body.modo-celular .game-screen canvas { touch-action: none; }
+
+.touch-titulo {
+  grid-column: 1 / -1;
+  color: var(--amarillo-lapiz);
+  font: 8px var(--fuente-pixel);
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+.touch-grupo { display: flex; gap: 6px; min-width: 0; }
+.touch-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 5px 3px;
+  color: var(--papel);
+  background: #2f4b42;
+  border: 3px solid var(--papel);
+  box-shadow: 0 0 0 2px var(--tinta), 3px 3px 0 rgba(0, 0, 0, 0.35);
+  font-family: var(--fuente-pixel);
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.touch-btn:active,
+.touch-btn.active {
+  color: var(--tinta);
+  background: var(--amarillo-lapiz);
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 2px var(--tinta), 1px 1px 0 rgba(0, 0, 0, 0.35);
+}
+.touch-icono { font-size: 20px; line-height: 1; }
+.touch-etiqueta { font-size: 6px; line-height: 1.2; letter-spacing: 0.02em; }
+.touch-btn-salto { background: var(--verde-hoja); }
+.touch-btn-martillo { background: var(--rojo-manzana); }
+.touch-btn-mate { background: var(--azul-badge); }
+
 /* ---------- Decoraciones alrededor de la pantalla ---------- */
 .decor {
   position: absolute;
@@ -1045,6 +1166,9 @@ a { color: inherit; }
   .game-page { padding-top: 38px; }
   .game-card { padding: 16px 14px; }
   .game-screen { min-height: 0; padding: 20px 8px 16px; }
+  .modo-selector { grid-template-columns: 1fr; gap: 12px; }
+  .modo-botones { justify-content: stretch; }
+  .modo-boton { flex: 1 1 0; }
   .school-notes { grid-template-columns: 1fr; max-width: 560px; }
   .school-notes article { min-height: 0; }
 }
@@ -1110,9 +1234,22 @@ a { color: inherit; }
   .hud-note { font-size: 7px; line-height: 2; }
   .hud-note i { margin: 0 3px; }
 
+  .modo-selector { padding: 14px; }
+  .modo-cabecera h2 { font-size: 20px; }
+  .modo-boton { padding: 9px 7px; font-size: 8px; }
+  .modo-ayuda { font-size: 13px; }
+  .touch-controls { gap: 7px; padding: 10px; }
+  .touch-btn { min-height: 56px; }
+  .touch-icono { font-size: 18px; }
+  .touch-etiqueta { font-size: 5.5px; }
+
   .school-footer { align-items: flex-start; flex-direction: column; border-top-width: 24px; }
   .school-footer::before { top: -24px; height: 24px; background-size: 96px 24px, 96px 24px, 96px 24px; }
   .school-footer div { align-items: flex-start; flex-direction: column; gap: 8px; }
+}
+
+@media (max-width: 380px) {
+  .touch-controls { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

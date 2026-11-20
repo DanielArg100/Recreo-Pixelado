@@ -25,8 +25,27 @@
 	Block.prototype.break = function() {
 		sounds.breakBlock.play();
 		(new Mario.Rubble()).spawn(this.pos);
-		var x = this.pos[0] / 16, y = this.pos[1] / 16;
-		delete level.blocks[y][x];
+
+		// Un bloque golpeado desde abajo queda rebotando y su pos pasa a tener
+		// decimales. Si el martillo lo rompe en ese momento, calcular la fila
+		// con la pos actual daba una fila inexistente y rompía el juego.
+		// Usamos la posición original del rebote y, si no coincide, buscamos
+		// el bloque por identidad en la grilla.
+		var origin = this.opos || this.pos;
+		var x = Math.round(origin[0] / 16);
+		var y = Math.round(origin[1] / 16);
+		var row = level.blocks[y];
+		if (row && row[x] === this) {
+			delete row[x];
+			return;
+		}
+		for (var r = 0; r < level.blocks.length; r++) {
+			var candidate = level.blocks[r];
+			if (candidate && candidate[x] === this) {
+				delete candidate[x];
+				return;
+			}
+		}
 	}
 
 	Block.prototype.hammerBreak = function() {
@@ -78,9 +97,12 @@
       }
     } else {
       if (this.sprite === this.usedSprite) {
-        var x = this.pos[0] / 16, y = this.pos[1] / 16;
-        level.statics[y][x] = new Mario.Floor(this.pos, this.usedSprite);
-        delete level.blocks[y][x];
+        // Misma precaución: redondeamos por si el bloque quedó con decimales.
+        var x = Math.round(this.pos[0] / 16), y = Math.round(this.pos[1] / 16);
+        if (level.statics[y] && level.blocks[y] && level.blocks[y][x] === this) {
+          level.statics[y][x] = new Mario.Floor(this.pos, this.usedSprite);
+          delete level.blocks[y][x];
+        }
       }
     }
 

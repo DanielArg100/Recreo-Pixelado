@@ -2,11 +2,11 @@
 <html lang="es">
   <head>
     <meta charset="utf-8">
-    <meta name="description" content="Recreo Pixelado: martillos, mates y 13 efectos aleatorios en un plataformas escolar ambientado en la E.E.S.T N°1 Cecilia Berdichevsky. Inspirado en Super Mario Bros. original.">
+    <meta name="description" content="Recreo Pixelado: martillos, mates y 15 efectos aleatorios en un plataformas escolar ambientado en la E.E.S.T N°1 Cecilia Berdichevsky. Inspirado en Super Mario Bros. original.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Recreo Pixelado | Videojuego</title>
     <link rel="shortcut icon" href="../SitioWeb/src/bruno-logo.png">
-    <link rel="stylesheet" href="css/game.css?v=9">
+    <link rel="stylesheet" href="css/game.css?v=11">
   </head>
   <body>
 	    <header class="school-header">
@@ -25,8 +25,27 @@
 	        <div class="hero-stamp">PROYECTO 01 <span>●</span> JUGABLE</div>
 	        <p class="eyebrow">E.E.S.T N°1 “CECILIA BERDICHEVSKY” · AVENTURA ESCOLAR</p>
 	        <h1 id="game-title">RECREO <span>PIXELADO</span></h1>
-	        <p class="intro">Controlás a Bruno, un payaso triste, en un plataformas escolar con martillo, mate y 13 efectos aleatorios. Todo transcurre en la E.E.S.T N°1 “Cecilia Berdichevsky”. Inspirado en Super Mario Bros. original.</p>
+	        <p class="intro">Controlás a Bruno, vestido de payaso, en un plataformas escolar con martillo, mate y 15 efectos aleatorios. Todo transcurre en la E.E.S.T N°1 “Cecilia Berdichevsky”. Inspirado en Super Mario Bros. original.</p>
 	      </section>
+
+      <section class="modo-selector" aria-labelledby="modo-titulo">
+        <div class="modo-cabecera">
+          <span class="modo-kicker">MODO DE JUEGO</span>
+          <h2 id="modo-titulo">¿CÓMO VAS A JUGAR?</h2>
+        </div>
+        <div class="modo-botones" role="group" aria-label="Elegir modo de juego">
+          <button type="button" class="modo-boton" data-modo="netbook" aria-pressed="true">
+            <span aria-hidden="true">💻</span> NETBOOK
+          </button>
+          <button type="button" class="modo-boton" data-modo="celular" aria-pressed="false">
+            <span aria-hidden="true">📱</span> CELULAR
+          </button>
+        </div>
+        <p class="modo-ayuda" id="modo-ayuda" aria-live="polite">
+          En Netbook usás el teclado: A/D para moverte, W para saltar, S para
+          agacharte, E para el martillo y M para el mate.
+        </p>
+      </section>
 
       <section class="game-card" aria-label="Pantalla del videojuego">
         <div class="decor decor-book decor-book-left" aria-hidden="true">📚</div>
@@ -106,8 +125,39 @@
               <span class="overlay-kicker">BOLETÍN · RECREO PIXELADO</span>
               <strong class="overlay-title">SIN INTENTOS</strong>
               <p>Se terminaron los recreos de Bruno. El patio vuelve a empezar...</p>
-              <span class="overlay-hint">3 INTENTOS NUEVOS EN UN MOMENTO</span>
+              <span class="overlay-hint">3 INTENTOS PARA VOLVER A JUGAR</span>
             </div>
+          </div>
+        </div>
+        <div id="touch-controls" class="touch-controls" aria-label="Controles táctiles" aria-hidden="true">
+          <span class="touch-titulo">CONTROLES TÁCTILES</span>
+          <div class="touch-grupo touch-movimiento">
+            <button type="button" class="touch-btn" data-game-key="LEFT" aria-label="Mover a la izquierda">
+              <span class="touch-icono" aria-hidden="true">◀</span>
+              <span class="touch-etiqueta">IZQ</span>
+            </button>
+            <button type="button" class="touch-btn" data-game-key="DOWN" aria-label="Agacharse">
+              <span class="touch-icono" aria-hidden="true">▼</span>
+              <span class="touch-etiqueta">ABAJO</span>
+            </button>
+            <button type="button" class="touch-btn" data-game-key="RIGHT" aria-label="Mover a la derecha">
+              <span class="touch-icono" aria-hidden="true">▶</span>
+              <span class="touch-etiqueta">DER</span>
+            </button>
+          </div>
+          <div class="touch-grupo touch-acciones">
+            <button type="button" class="touch-btn touch-btn-salto" data-game-key="JUMP" aria-label="Saltar">
+              <span class="touch-icono" aria-hidden="true">↑</span>
+              <span class="touch-etiqueta">SALTO</span>
+            </button>
+            <button type="button" class="touch-btn touch-btn-martillo" data-game-key="ATTACK" aria-label="Usar el martillo">
+              <span class="touch-icono" aria-hidden="true">🔨</span>
+              <span class="touch-etiqueta">GOLPE</span>
+            </button>
+            <button type="button" class="touch-btn touch-btn-mate" data-game-key="M" aria-label="Cebar un mate">
+              <span class="touch-icono" aria-hidden="true">🧉</span>
+              <span class="touch-etiqueta">MATE</span>
+            </button>
           </div>
         </div>
 	        <div class="hud-note"><span>WASD</span> MOVER <i></i> <span>W</span> SALTAR <i></i> <span>E / CLICK</span> MARTILLO <i></i> <span>M</span> MATE</div>
@@ -115,7 +165,7 @@
 	          <div><small>SECTOR</small><strong>EXTERIOR → PASILLOS</strong></div>
 	          <div><small>OBJETIVO</small><strong>CHECKPOINT Y BANDERA</strong></div>
 	          <div><small>FORMATO</small><strong>2 ETAPAS · 3 INTENTOS</strong></div>
-	          <div><small>MATETERA</small><strong>HASTA 2 · 13 EFECTOS</strong></div>
+	          <div><small>MATETERA</small><strong>HASTA 2 · 15 EFECTOS</strong></div>
 	        </div>
 	      </section>
 
@@ -129,29 +179,30 @@
 	    <footer class="school-footer"><div><span class="footer-label">RECREO PIXELADO</span><span>Expotécnica 6°3 · E.E.S.T N°1 “Cecilia Berdichevsky”</span></div><a href="../index.html">VOLVER AL SITIO PRINCIPAL <b>↗</b></a></footer>
 
     <script src="js/util.js"></script>
-    <script src="js/input.js"></script>
+    <script src="js/input.js?v=2"></script>
+    <script src="js/game-modes.js?v=1"></script>
     <script src="js/resources.js?v=2"></script>
     <script src="js/sprite.js?v=5"></script>
     <script src="js/entity.js"></script>
     <script src="js/pipe.js"></script>
-	<script src="js/mushroom.js?v=2"></script>
+	<script src="js/mushroom.js?v=3"></script>
 	<script src="js/fireflower.js?v=2"></script>
-    <script src="js/star.js?v=2"></script>
-	<script src="js/fireball.js"></script>
+    <script src="js/star.js?v=3"></script>
+	<script src="js/fireball.js?v=1"></script>
     <script src="js/coin.js"></script>
     <script src="js/bcoin.js"></script>
     <script src="js/goofy.js"></script>
-	<script src="js/goomba.js?v=2"></script>
-    <script src="js/koopa.js?v=2"></script>
+	<script src="js/goomba.js?v=4"></script>
+    <script src="js/koopa.js?v=4"></script>
     <script src="js/goblin.js?v=9"></script>
     <script src="js/floor.js"></script>
-    <script src="js/block.js?v=2"></script>
+    <script src="js/block.js?v=3"></script>
     <script src="js/rubble.js"></script>
     <script src="js/prop.js"></script>
-    <script src="js/player.js?v=8"></script>
+    <script src="js/player.js?v=9"></script>
     <script src="js/flag.js?v=2"></script>
     <script src="js/levels/level.js?v=5"></script>
-    <script src="js/mate.js?v=7"></script>
+    <script src="js/mate.js?v=8"></script>
     <script src="js/levels/11.js?v=11"></script>
     <script src="js/levels/11tunnel.js?v=5"></script>
     <script src="js/game.js?v=18"></script>

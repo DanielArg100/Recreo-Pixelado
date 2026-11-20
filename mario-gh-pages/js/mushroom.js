@@ -78,12 +78,16 @@
     }
 
     for (var i = 0; i < h; i++) {
+      var row = baseY + i;
+      if (row < 0 || row >= level.statics.length) continue;
+      var staticsRow = level.statics[row];
+      var blocksRow = level.blocks[row];
       for (var j = 0; j < w; j++) {
-        if (level.statics[baseY + i][baseX + j]) {
-          level.statics[baseY + i][baseX + j].isCollideWith(this);
+        if (staticsRow && staticsRow[baseX + j]) {
+          staticsRow[baseX + j].isCollideWith(this);
         }
-        if (level.blocks[baseY + i][baseX + j]) {
-          level.blocks[baseY + i][baseX + j].isCollideWith(this);
+        if (blocksRow && blocksRow[baseX + j]) {
+          blocksRow[baseX + j].isCollideWith(this);
         }
       }
     }

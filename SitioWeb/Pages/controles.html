@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Controles y mecánicas de Recreo Pixelado: martillo, mate, 13 efectos aleatorios y enemigos goofy."
+      content="Controles y mecánicas de Recreo Pixelado: teclado, modo celular, martillo, mate, 15 efectos aleatorios y enemigos goofy."
     />
     <link rel="shortcut icon" href="../src/bruno-logo.png" />
-    <link rel="stylesheet" href="../style/estilos.css?v=4" />
+    <link rel="stylesheet" href="../style/estilos.css?v=5" />
     <title>Recreo Pixelado | Controles</title>
   </head>
   <body>
@@ -30,13 +30,14 @@
       <section class="tarjetaControles">
         <h1>CONTROLES DEL JUEGO</h1>
         <p>
-          Controlás a Bruno en el navegador con el teclado. El juego arranca solo
-          al cargar la página y todo transcurre en la
+          Controlás a Bruno, vestido de payaso, en el navegador con el teclado.
+          El juego arranca solo al cargar la página y todo transcurre en la
           <strong>E.E.S.T N°1 “Cecilia Berdichevsky”</strong>.
         </p>
 
         <h1>CONTROLES BÁSICOS</h1>
         <p>
+          En el modo <strong>Netbook</strong>, estos son los controles de teclado:<br /><br />
           <strong><kbd>W</kbd> o <kbd>X</kbd>:</strong> saltar (mantener = salto más alto)<br /><br />
           <strong><kbd>A</kbd> o <kbd>←</kbd>:</strong> mover a la izquierda<br /><br />
           <strong><kbd>D</kbd> o <kbd>→</kbd>:</strong> mover a la derecha<br /><br />
@@ -46,13 +47,26 @@
           <strong><kbd>↑</kbd>, <kbd>Espacio</kbd> y <kbd>Enter</kbd>:</strong> no tienen función
         </p>
 
+        <h1>MODO NETBOOK O CELULAR</h1>
+        <p>
+          En la página del juego podés elegir cómo jugar desde el selector
+          <strong>“¿CÓMO VAS A JUGAR?”</strong>. El modo <strong>Netbook</strong>
+          usa el teclado. El modo <strong>Celular</strong> muestra botones
+          táctiles: mantené <strong>◀ ▶</strong> para moverte, <strong>▼</strong>
+          para agacharte, <strong>SALTO</strong>, <strong>GOLPE</strong> para el
+          martillo y <strong>MATE</strong> para cebar. El modo elegido queda
+          guardado en el navegador; en un celular o tablet se activa solo la
+          primera vez.
+        </p>
+
         <h1>EL MARTILLO</h1>
         <p>
-          El martillo golpea igual hacia la izquierda que hacia la derecha. Su
+          El martillo golpea igual hacia la izquierda que hacia la derecha, rompe
+          bloques y sirve para enfrentar enemigos. Su
           <strong>alcance base es de 24 px</strong> y el efecto
           <em>“Martillo más largo”</em> del mate le suma <strong>12 px</strong>
-          durante esa partida. Rompé bloques con él: algunos sueltan material
-          para el mate. El anillo del HUD muestra cuándo vuelve a estar listo.
+          durante esa partida. Algunos bloques rotos sueltan material para el
+          mate. El anillo del HUD muestra cuándo vuelve a estar listo.
         </p>
 
         <h1>EL MATE</h1>
@@ -65,21 +79,135 @@
           <em>“MATERIAL PARA EL MATE OBTENIDO”</em>.
         </p>
         <p>
-          Apretá <kbd>M</kbd> para cebar uno: elige uno de <strong>13 efectos
-          aleatorios</strong>. Hay premios (vida, intentos, salto, velocidad y
-          martillo) y castigos (daño, lentitud, mareo, alucinaciones y controles
-          invertidos). El panel <strong>EFECTO ACTIVO</strong> del HUD muestra una
-          barra con el tiempo restante de cada efecto temporal.
+          Apretá <kbd>M</kbd> para cebar uno: elige uno de <strong>15 efectos
+          aleatorios</strong>. Hay premios (vida, intentos, salto, velocidad,
+          martillo e invencibilidad) y castigos (daño, lentitud, mareo,
+          alucinaciones, controles invertidos y peso de carpeta). El panel
+          <strong>EFECTO ACTIVO</strong> del HUD muestra una barra con el tiempo
+          restante de cada efecto temporal.
         </p>
 
         <h1>EFECTOS TEMPORALES</h1>
         <p>
-          Los efectos duran unos <strong>14 segundos</strong>: el mareo
-          <strong>8 s</strong>, las alucinaciones <strong>10 s</strong> y los
-          controles invertidos <strong>12 s</strong>. Con el mareo y las
-          alucinaciones aparecen <strong>estrellas y símbolos en la pantalla</strong>,
-          además del giro y los colores del juego.
+          La mayoría de los efectos temporales dura <strong>14 segundos</strong>;
+          además, el mareo dura <strong>8 s</strong>, las alucinaciones
+          <strong>10 s</strong>, la invencibilidad <strong>6 s</strong>, el peso de
+          carpeta <strong>12 s</strong> y los controles invertidos
+          <strong>12 s</strong>. Con el mareo y las alucinaciones aparecen
+          <strong>estrellas y símbolos en la pantalla</strong>, además del giro y
+          los colores del juego.
         </p>
+
+        <h1>TODOS LOS EFECTOS DEL MATE</h1>
+        <p>
+          El juego sortea uno al azar cada vez que cebás. Esta es la lista
+          completa, con lo que hace cada uno y cuánto dura.
+        </p>
+        <div class="tablaEfectos">
+          <table>
+            <caption>Los 15 efectos del mate</caption>
+            <thead>
+              <tr>
+                <th scope="col">Efecto</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Duración</th>
+                <th scope="col">Qué hace</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">¡Saltarás más!</th>
+                <td><span class="tipo tipo-extra">Extra</span></td>
+                <td>14 s</td>
+                <td>El salto llega más alto: el impulso pasa de −6 a −7,4.</td>
+              </tr>
+              <tr>
+                <th scope="row">¡Te curaste!</th>
+                <td><span class="tipo tipo-premio">Premio</span></td>
+                <td>Instantáneo</td>
+                <td>Recupera 1 corazón, sin pasar el máximo.</td>
+              </tr>
+              <tr>
+                <th scope="row">¡El mate te pegó!</th>
+                <td><span class="tipo tipo-castigo">Castigo</span></td>
+                <td>Instantáneo</td>
+                <td>Pierde 1 corazón. Este daño ignora la invencibilidad.</td>
+              </tr>
+              <tr>
+                <th scope="row">+1 vida máxima</th>
+                <td><span class="tipo tipo-extra">Extra</span></td>
+                <td>Toda la partida</td>
+                <td>Suma 1 corazón al máximo y deja la salud llena.</td>
+              </tr>
+              <tr>
+                <th scope="row">−1 vida máxima</th>
+                <td><span class="tipo tipo-castigo">Castigo</span></td>
+                <td>Toda la partida</td>
+                <td>Resta 1 corazón al máximo, con un mínimo de 1.</td>
+              </tr>
+              <tr>
+                <th scope="row">+1 intento</th>
+                <td><span class="tipo tipo-extra">Extra</span></td>
+                <td>Instantáneo</td>
+                <td>Suma 1 intento a los que quedan.</td>
+              </tr>
+              <tr>
+                <th scope="row">−1 intento</th>
+                <td><span class="tipo tipo-castigo">Castigo</span></td>
+                <td>Instantáneo</td>
+                <td>Resta 1 intento, con un mínimo de 0.</td>
+              </tr>
+              <tr>
+                <th scope="row">¡Más rápido!</th>
+                <td><span class="tipo tipo-extra">Extra</span></td>
+                <td>14 s</td>
+                <td>La velocidad máxima se multiplica por 1,35.</td>
+              </tr>
+              <tr>
+                <th scope="row">¡Más lento!</th>
+                <td><span class="tipo tipo-castigo">Castigo</span></td>
+                <td>14 s</td>
+                <td>La velocidad máxima se multiplica por 0,6.</td>
+              </tr>
+              <tr>
+                <th scope="row">¡Martillo más largo!</th>
+                <td><span class="tipo tipo-extra">Extra</span></td>
+                <td>Toda la partida</td>
+                <td>Suma 12 px al alcance del martillo. Se acumula con cada mate.</td>
+              </tr>
+              <tr>
+                <th scope="row">¡Estás mareo!</th>
+                <td><span class="tipo tipo-castigo">Castigo</span></td>
+                <td>8 s</td>
+                <td>Muestra estrellas, gira la pantalla y marea a Bruno.</td>
+              </tr>
+              <tr>
+                <th scope="row">¡Alucinando!</th>
+                <td><span class="tipo tipo-extra">Extra</span></td>
+                <td>10 s</td>
+                <td>Colores y símbolos alucinantes invaden la pantalla.</td>
+              </tr>
+              <tr>
+                <th scope="row">¡Controles invertidos!</th>
+                <td><span class="tipo tipo-castigo">Castigo</span></td>
+                <td>12 s</td>
+                <td>Izquierda y derecha se intercambian.</td>
+              </tr>
+              <tr>
+                <th scope="row">¡Invencible!</th>
+                <td><span class="tipo tipo-extra">Extra</span></td>
+                <td>6 s</td>
+                <td>No pierde corazones al tocar enemigos y Bruno parpadea.</td>
+              </tr>
+              <tr>
+                <th scope="row">¡Peso de carpeta!</th>
+                <td><span class="tipo tipo-castigo">Castigo</span></td>
+                <td>12 s</td>
+                <td>La gravedad aumenta ×1,55: cae más rápido y salta más corto.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <h1>MECÁNICAS</h1>
         <p>
@@ -95,7 +223,9 @@
           • <strong>Estrella:</strong> aumenta la salud máxima en 1.<br /><br />
           • <strong>Enemigos goofy:</strong> goombas y koopas hacen ocurrencias
           aleatorias con globos de texto: siestas, trompos, corridas, patinadas,
-          reverencias, miradas y pasos atrás. No cambian el daño ni el puntaje.
+          reverencias, miradas, pasos atrás, sustos y saltitos. Los sustos son
+          exclusivos de los goombas y los saltitos, de los koopas. No cambian el
+          daño ni el puntaje.
         </p>
 
         <h1>INSTRUCCIONES PARA EMPEZAR</h1>

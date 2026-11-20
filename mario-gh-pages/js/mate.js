@@ -236,6 +236,20 @@
         self.inverted = 12;
         self.startEffect('inverted', 'inverted', 12);
       }
+    },
+    {
+      id: 'invincible', label: '¡INVENCIBLE!', kind: 'extra',
+      run: function(self) {
+        self.setTimed('invincible', 6);
+        self.startEffect('invincible', 'invincible', 6);
+      }
+    },
+    {
+      id: 'heavy', label: '¡PESO DE CARPETA!', kind: 'hurt',
+      run: function(self) {
+        self.setTimed('heavy', 12);
+        self.startEffect('heavy', 'heavy', 12);
+      }
     }
   ];
 
@@ -269,6 +283,8 @@
       if (typeof player !== 'undefined') {
         player.jumpBoost = false;
         player.speedBoost = 1;
+        player.gravityScale = 1;
+        player.invincibility = 0;
       }
       updateMateHud();
     },
@@ -344,7 +360,9 @@
         speed: this.timed.speed || 0,
         dizzy: this.screen.dizzy,
         trippy: this.screen.trippy,
-        inverted: this.inverted
+        inverted: this.inverted,
+        invincible: this.timed.invincible || 0,
+        heavy: this.timed.heavy || 0
       };
       for (var slot in this.active) {
         if (!this.active.hasOwnProperty(slot)) continue;
@@ -357,12 +375,19 @@
     clearTimedEffect: function(name) {
       if (name === 'jump' && player) player.jumpBoost = false;
       if (name === 'speed' && player) player.speedBoost = 1;
+      if (name === 'invincible' && player) player.invincibility = 0;
+      if (name === 'heavy' && player) player.gravityScale = 1;
     },
 
     setTimed: function(name, seconds) {
       if (player) {
         if (name === 'jump') player.jumpBoost = true;
         if (name === 'speed') player.speedBoost = 1.35;
+        // La invencibilidad del jugador se mide en frames (60 por segundo).
+        if (name === 'invincible') {
+          player.invincibility = Math.max(player.invincibility || 0, seconds * 60);
+        }
+        if (name === 'heavy') player.gravityScale = 1.55;
       }
       this.timed[name] = seconds;
     },

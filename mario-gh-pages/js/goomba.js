@@ -27,7 +27,7 @@
 		this.bubbleLift = 0;
   };
 
-  var GOOFY_ACTS = ['wiggle', 'nap', 'dash', 'spin', 'backstep'];
+  var GOOFY_ACTS = ['wiggle', 'nap', 'dash', 'spin', 'backstep', 'scare'];
 
   Goomba.prototype.render = function(ctx, vX, vY) {
     Mario.Goofy.drawSprite(ctx, this.sprite, this, vX, vY, this.goofySpin);
@@ -41,6 +41,7 @@
     this.goofyTime = 0;
     this.goofyDuration = act === 'nap' ? 1.3 + Math.random() * 0.8
       : act === 'dash' ? 0.6 + Math.random() * 0.3
+      : act === 'scare' ? 0.9 + Math.random() * 0.4
       : 0.8 + Math.random() * 0.5;
     this.goofyVel = this.vel[0];
     if (act === 'nap') {
@@ -55,6 +56,11 @@
     } else if (act === 'backstep') {
       this.vel[0] = -this.goofyVel * 0.9;
       this.bubble = '¿?';
+    } else if (act === 'scare') {
+      // Exclusivo del goomba: pega un salto hacia atrás y tiembla de miedo.
+      this.vel[0] = -this.goofyVel * 1.6;
+      if (this.standing) this.vel[1] = -4;
+      this.bubble = '¡AY!';
     } else {
       this.bubble = '~';
     }
@@ -83,6 +89,8 @@
       this.goofySpin = wave * 0.22;
     } else if (this.goofy === 'spin') {
       this.goofySpin = p * Math.PI * 4;
+    } else if (this.goofy === 'scare') {
+      this.goofySpin = Math.sin(p * Math.PI * 14) * 0.16;
     }
 
     if (p >= 1) {
@@ -145,12 +153,17 @@
     }
 
     for (var i = 0; i < h; i++) {
+      var row = baseY + i;
+      // Misma protección que en el koopa: nunca indexar una fila inexistente.
+      if (row < 0 || row >= level.statics.length) continue;
+      var staticsRow = level.statics[row];
+      var blocksRow = level.blocks[row];
       for (var j = 0; j < w; j++) {
-        if (level.statics[baseY + i][baseX + j]) {
-          level.statics[baseY + i][baseX + j].isCollideWith(this);
+        if (staticsRow && staticsRow[baseX + j]) {
+          staticsRow[baseX + j].isCollideWith(this);
         }
-        if (level.blocks[baseY + i][baseX + j]) {
-          level.blocks[baseY + i][baseX + j].isCollideWith(this);
+        if (blocksRow && blocksRow[baseX + j]) {
+          blocksRow[baseX + j].isCollideWith(this);
         }
       }
     }

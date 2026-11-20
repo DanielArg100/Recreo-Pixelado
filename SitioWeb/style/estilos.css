@@ -229,6 +229,91 @@ main::after {
   padding: 0.2em 0.4em;
 }
 
+/* Tabla de los efectos del mate */
+.tablaEfectos {
+  margin-top: 1.25rem;
+  overflow-x: auto;
+  border: 3px solid var(--tinta);
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.25);
+  background-color: #fffdf6;
+}
+
+.tablaEfectos table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.tablaEfectos caption {
+  caption-side: top;
+  padding: 0.7rem 0.9rem;
+  font-family: var(--fuente-chica);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--papel);
+  background-color: var(--verde-hoja);
+  text-align: left;
+}
+
+.tablaEfectos th,
+.tablaEfectos td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 2px solid rgba(43, 43, 43, 0.15);
+  vertical-align: top;
+  text-align: left;
+}
+
+.tablaEfectos thead th {
+  font-family: var(--fuente-chica);
+  font-size: 0.58rem;
+  letter-spacing: 0.03em;
+  color: var(--papel);
+  background-color: var(--pizarra-oscuro);
+  border-bottom: 3px solid var(--tinta);
+}
+
+.tablaEfectos tbody th {
+  color: var(--rojo-oscuro);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.tablaEfectos tbody tr:nth-child(even) {
+  background-color: rgba(44, 74, 65, 0.06);
+}
+
+.tablaEfectos tbody tr:hover {
+  background-color: rgba(242, 194, 48, 0.22);
+}
+
+.tipo {
+  display: inline-block;
+  padding: 0.12em 0.5em;
+  border: 2px solid var(--tinta);
+  border-radius: 3px;
+  font-family: var(--fuente-chica);
+  font-size: 0.52rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.tipo-extra {
+  background-color: var(--azul-tiza);
+  color: var(--pizarra-oscuro);
+}
+
+.tipo-premio {
+  background-color: var(--verde-hoja);
+  color: var(--papel);
+}
+
+.tipo-castigo {
+  background-color: var(--rojo-manzana);
+  color: var(--papel);
+}
+
 /* ---------- Pie de página (galpón del colegio) ---------- */
 .piePagina {
   position: relative;

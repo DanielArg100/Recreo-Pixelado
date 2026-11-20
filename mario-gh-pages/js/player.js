@@ -51,6 +51,8 @@
 		this.jumpBoost = false;
 		this.speedBoost = 1;
 		this.hammerRange = 0;
+		// El efecto "peso de carpeta" multiplica la gravedad.
+		this.gravityScale = 1;
 
 		Mario.Entity.call(this, {
 			pos: pos,
@@ -291,7 +293,7 @@
 			}
 		}
 		else {
-			this.acc[1] = 0.25
+			this.acc[1] = 0.25 * (this.gravityScale || 1);
 			if (this.pos[1] > 240) {
 				this.die();
 			}

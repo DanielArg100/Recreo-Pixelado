@@ -32,7 +32,7 @@
 		this.bubbleLift = 0;
   };
 
-  var GOOFY_ACTS = ['skate', 'bow', 'peek', 'backstep', 'tumble'];
+  var GOOFY_ACTS = ['skate', 'bow', 'peek', 'backstep', 'tumble', 'hop'];
 
   Koopa.prototype.render = function(ctx, vX, vY) {
     Mario.Goofy.drawSprite(ctx, this.sprite, this, vX, vY, this.goofySpin);
@@ -46,9 +46,11 @@
     this.goofyTime = 0;
     this.goofyDuration = act === 'skate' ? 0.6 + Math.random() * 0.4
       : act === 'bow' ? 0.9 + Math.random() * 0.4
+      : act === 'hop' ? 1.1 + Math.random() * 0.6
       : 0.7 + Math.random() * 0.5;
     this.goofyVel = this.vel[0];
     this.goofyFace = null;
+    this.goofyHop = 0;
     if (act === 'skate') {
       this.vel[0] = (this.goofyVel < 0 ? -1 : 1) * 2;
       this.bubble = '¡¡';
@@ -62,6 +64,11 @@
     } else if (act === 'backstep') {
       this.vel[0] = -this.goofyVel * 0.8;
       this.bubble = '¿?';
+    } else if (act === 'hop') {
+      // Exclusivo del koopa: avanza lento dando saltitos repetidos.
+      this.vel[0] = this.goofyVel * 0.5;
+      if (this.standing) this.vel[1] = -4.5;
+      this.bubble = '¡BOING!';
     } else {
       this.vel[0] = this.goofyVel * 0.3;
       this.bubble = '★';
@@ -90,6 +97,13 @@
       this.goofySpin = Math.sin(p * Math.PI) * 0.6;
     } else if (this.goofy === 'tumble') {
       this.goofySpin = p * Math.PI * 4;
+    } else if (this.goofy === 'hop') {
+      this.goofyHop -= dt;
+      if (this.goofyHop <= 0 && this.vel[1] >= 0) {
+        this.vel[1] = -4.2;
+        this.goofyHop = 0.34;
+      }
+      this.goofySpin = Math.sin(p * Math.PI * 8) * 0.08;
     }
 
     if (p >= 1) {
@@ -199,12 +213,18 @@
     }
 
     for (var i = 0; i < h; i++) {
+      var row = baseY + i;
+      // El koopa puede quedar por encima del nivel al saltar: sin este
+      // control, level.statics[-1] es undefined y el juego se rompe.
+      if (row < 0 || row >= level.statics.length) continue;
+      var staticsRow = level.statics[row];
+      var blocksRow = level.blocks[row];
       for (var j = 0; j < w; j++) {
-        if (level.statics[baseY + i][baseX + j]) {
-          level.statics[baseY + i][baseX + j].isCollideWith(this);
+        if (staticsRow && staticsRow[baseX + j]) {
+          staticsRow[baseX + j].isCollideWith(this);
         }
-        if (level.blocks[baseY + i][baseX + j]) {
-          level.blocks[baseY + i][baseX + j].isCollideWith(this);
+        if (blocksRow && blocksRow[baseX + j]) {
+          blocksRow[baseX + j].isCollideWith(this);
         }
       }
     }
